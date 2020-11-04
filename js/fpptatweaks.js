@@ -7,6 +7,7 @@ CRM.$(function($) {
 
       $('> td:first-child', this).append('<span>' + relText + '</span>').find('a:first-child').remove();
       $('> td:nth-child(2)', this).append(relOrgIcon + '<span>' + relOrgText + '</span>').find('a').remove();
+      $('> td:last-child a[title="Disable Relationship"]', this).remove();
     });
   });
 });
