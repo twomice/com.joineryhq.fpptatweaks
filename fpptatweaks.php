@@ -18,7 +18,7 @@ function fpptatweaks_civicrm_alterTemplateFile($formName, &$form, $context, &$tp
    */
   if($formName = 'CRM_Profile_Page_Dynamic' && $gid = $form->getVar('_gid')) {
     $cpptHistoryGid = Civi::settings()->get('fpptatweaks_cppt_history_profile');
-    if ($gid = $cpptHistoryGid) {
+    if ($gid == $cpptHistoryGid) {
       // Specify we're using a different template.
       $tplName = "CRM/Fpptatweaks/hooked/Page/cpptHistory.tpl";
 
