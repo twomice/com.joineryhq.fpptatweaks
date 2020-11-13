@@ -7,9 +7,9 @@
  * extension.
  */
 class CRM_Fpptatweaks_ExtensionUtil {
-  const SHORT_NAME = "fpptatweaks";
-  const LONG_NAME = "com.joineryhq.fpptatweaks";
-  const CLASS_PREFIX = "CRM_Fpptatweaks";
+  const SHORT_NAME = 'fpptatweaks';
+  const LONG_NAME = 'com.joineryhq.fpptatweaks';
+  const CLASS_PREFIX = 'CRM_Fpptatweaks';
 
   /**
    * Translate a string using the extension's domain.

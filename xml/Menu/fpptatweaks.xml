@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<menu>
+  <item>
+    <path>civicrm/admin/fpptatweaks/settings</path>
+    <page_callback>CRM_Fpptatweaks_Form_Settings</page_callback>
+    <title>FPPTA Tweaks: Settings</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+</menu>
