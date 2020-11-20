@@ -195,7 +195,7 @@ class CRM_Fpptatweaks_Form_Settings extends CRM_Core_Form {
     $options = [
       '0' => '-' . E::ts('none') . '-',
      ];
-    $filteredUFGroupSettings = CRM_Cdashtabs_Settings::getFilteredUFGroupSettings(TRUE);
+    $filteredUFGroupSettings = CRM_Cdashtabs_Settings::getFilteredSettings(TRUE, 'uf_group');
     foreach ($filteredUFGroupSettings as $filteredUFGroupSetting) {
       $gid = $filteredUFGroupSetting['uf_group_id'];
       $ufGroupResult = civicrm_api3('UFGroup', 'get', [
