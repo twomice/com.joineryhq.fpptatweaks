@@ -29,7 +29,7 @@
       <html_type>Autocomplete-Select</html_type>
       <is_search_range>0</is_search_range>
       <weight>1</weight>
-      <is_active>1</is_active>http://fppta.l/wp-admin/admin.php?page=CiviCRM&q=civicrm%2Fadmin%2Fcustom%2Fgroup&action=update&reset=1&id=26
+      <is_active>1</is_active>
       <is_view>1</is_view>
       <text_length>255</text_length>
       <note_columns>60</note_columns>
