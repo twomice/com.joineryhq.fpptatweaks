@@ -38,7 +38,6 @@ class CRM_Fpptatweaks_Form_Reqendrship extends CRM_Core_Form {
       if (!$relationship) {
         CRM_Core_Error::statusBounce('No such relationship could be found.');
       }
-      d($relationship);
       // Store values for postProcess.
       $this->set('relationship_type', $relationship['relationship_type']['label_b_a']);
       $this->set('contact_id_a', $relationship['contact_id_a']);
