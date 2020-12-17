@@ -6,4 +6,10 @@
     <title>FPPTA Tweaks: Settings</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/fppta/reqendrship</path>
+    <page_callback>CRM_Fpptatweaks_Form_Reqendrship</page_callback>
+    <title>Reqendrship</title>
+    <access_arguments>access Contact Dashboard</access_arguments>
+  </item>
 </menu>

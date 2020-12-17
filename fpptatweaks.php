@@ -208,7 +208,7 @@ function fpptatweaks_civicrm_themes(&$themes) {
 //  _fpptatweaks_civix_insert_navigation_menu($menu, 'Mailings', array(
 //    'label' => E::ts('New subliminal message'),
 //    'name' => 'mailing_subliminal_message',
-//    'url' => 'civicrm/mailing/subliminal',
+//    'url' => 'civhttps://docs.civicrm.org/dev/en/stable/hooks/hook_civicrm_permission/icrm/mailing/subliminal',
 //    'permission' => 'access CiviMail',
 //    'operator' => 'OR',
 //    'separator' => 0,
@@ -247,7 +247,8 @@ function _fpptatweaks_log_api_error(CiviCRM_API3_Exception $e, string $entity, s
 function _fpptatweaks_civicrmapi(string $entity, string $action, array $params, bool $silence_errors = TRUE) {
   try {
     $result = civicrm_api3($entity, $action, $params);
-  } catch (CiviCRM_API3_Exception $e) {
+  }
+  catch (CiviCRM_API3_Exception $e) {
     _fpptatweaks_log_api_error($e, $entity, $action, $params);
     if (!$silence_errors) {
       throw $e;
