@@ -286,3 +286,65 @@ function fpptatweaks_civicrm_navigationMenu(&$menu) {
     }
   }
 }
+
+/**
+ * Implements hook_civicrm_buildForm().
+ *
+ * Set a default value for an event price set field.
+ *
+ * @param string $formName
+ * @param CRM_Core_Form $form
+ */
+function fpptatweaks_civicrm_buildForm($formName, &$form) {
+  if ($formName == 'CRM_Profile_Form_Edit') {
+    // get the fpptatweaks_new_relationship_profile value
+    $ufgroupID = Civi::settings()->get('fpptatweaks_new_relationship_profile');
+    // proceed if match on the gorup id
+    if ($form->getVar( '_gid' ) == $ufgroupID) {
+      // Get logged in user id
+      $userCid = CRM_Core_Session::singleton()->getLoggedInContactID();
+      if (CRM_Fpptatweaks_Util::hasPermissionedRelatedContact($userCid, 'Organization')) {
+        $relatedOrgs = CRM_Fpptatweaks_Util::getPermissionedContacts($userCid, NULL, NULL, 'Organization');
+        $groupregOrganizationOptions = [];
+        foreach ($relatedOrgs as $relatedOrgCid => $relatedOrg) {
+          $groupregOrganizationOptions[$relatedOrgCid] = $relatedOrg['name'];
+        }
+        $form->add('select', 'contact_id', E::ts('Organization'), $groupregOrganizationOptions, TRUE, [
+          'class' => 'crm-select2',
+          'style' => 'width: 100%;',
+          'placeholder' => '- ' . E::ts('Select') . ' -',
+        ]);
+
+        $relationshipTypeOptions = CRM_Fpptatweaks_Util::getRelationshipTypeOptions('Organization');
+        $form->add('select', 'relationship_type_id', E::ts("Relationship"), $relationshipTypeOptions, TRUE, [
+          'class' => 'crm-select2',
+          'style' => 'width: 100%;',
+          'placeholder' => '- ' . E::ts('Select') . '-'
+        ]);
+
+        $tpl = CRM_Core_Smarty::singleton();
+        $bhfe = $tpl->get_template_vars('beginHookFormElements');
+        if (!$bhfe) {
+          $bhfe = array();
+        }
+        $bhfe[] = 'contact_id';
+        $bhfe[] = 'relationship_type_id';
+        $form->assign('beginHookFormElements', $bhfe);
+
+        CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.fpptatweaks', 'js/CRM_Profile_Form_Edit.js');
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_civicrm_postProcess().
+ *
+ * @param string $formName
+ * @param CRM_Core_Form $form
+ */
+function fpptatweaks_civicrm_postProcess($formName, $form) {
+  if ($formName == 'CRM_Profile_Form_Edit') {
+
+  }
+}

@@ -193,7 +193,7 @@ class CRM_Fpptatweaks_Form_Settings extends CRM_Core_Form {
 
   public static function getCpptHistoryProfileOptions() {
     $options = [
-      '0' => '-' . E::ts('none') . '-',
+      '' => '-' . E::ts('none') . '-',
      ];
     $filteredUFGroupSettings = CRM_Cdashtabs_Settings::getFilteredSettings(TRUE, 'uf_group');
     foreach ($filteredUFGroupSettings as $filteredUFGroupSetting) {
@@ -207,6 +207,40 @@ class CRM_Fpptatweaks_Form_Settings extends CRM_Core_Form {
       $options[$gid] = $ufGroup['frontend_title'] ?? $ufGroup['title'];
     }
     return $options;
-    
+
+  }
+
+  /**
+   * Get UF Group list that used for Profile (Stand alone or Directory)
+   *
+   */
+  public static function getUFGroupList() {
+    $options = [
+      '' => '-' . E::ts('none') . '-',
+    ];
+    // Call all ufgroup
+    $uFGroups = \Civi\Api4\UFGroup::get()
+      ->execute();
+    foreach ($uFGroups as $uFGroup) {
+      // Check if the join module is profile
+      $ufJoinRecords = CRM_Core_BAO_UFGroup::getUFJoinRecord($uFGroup['id']);
+      foreach ($ufJoinRecords as $key => $value) {
+        if ($value == 'Profile') {
+          // Add in the list of option if its profile
+          $options[$uFGroup['id']] = $uFGroup['frontend_title'] ?? $uFGroup['title'];
+          continue;
+        }
+      }
+    }
+    return $options;
+  }
+
+  /**
+   * Get Tag List
+   *
+   */
+  public static function getTagList() {
+    $options = ['' => E::ts('- none -')] + CRM_Core_BAO_EntityTag::buildOptions('tag_id') + ['-1' => E::ts('- NONE: ENABLE PERMISSIONED RELATIONSHIPS -')];
+    return $options;
   }
 }
