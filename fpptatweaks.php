@@ -298,18 +298,18 @@ function fpptatweaks_civicrm_navigationMenu(&$menu) {
 function fpptatweaks_civicrm_buildForm($formName, &$form) {
   if ($formName == 'CRM_Profile_Form_Edit') {
     // get the fpptatweaks_new_relationship_profile value
-    $ufgroupID = Civi::settings()->get('fpptatweaks_new_relationship_profile');
+    $ufgroupId = Civi::settings()->get('fpptatweaks_new_relationship_profile');
     // proceed if match on the gorup id
-    if ($form->getVar('_gid') == $ufgroupID) {
+    if ($form->getVar('_gid') == $ufgroupId) {
       // Get logged in user id
       $userCid = CRM_Core_Session::singleton()->getLoggedInContactID();
       if (CRM_Fpptatweaks_Util::hasPermissionedRelatedContact($userCid, 'Organization')) {
         $relatedOrgs = CRM_Fpptatweaks_Util::getPermissionedContacts($userCid, NULL, NULL, 'Organization');
-        $groupregOrganizationOptions = [];
+        $organizationOptions = [];
         foreach ($relatedOrgs as $relatedOrgCid => $relatedOrg) {
-          $groupregOrganizationOptions[$relatedOrgCid] = $relatedOrg['name'];
+          $organizationOptions[$relatedOrgCid] = $relatedOrg['name'];
         }
-        $form->add('select', 'org_id', E::ts('Organization'), $groupregOrganizationOptions, TRUE, [
+        $form->add('select', 'org_id', E::ts('Organization'), $organizationOptions, TRUE, [
           'class' => 'crm-select2',
           'style' => 'width: 100%;',
           'placeholder' => '- ' . E::ts('Select') . ' -',
@@ -346,38 +346,39 @@ function fpptatweaks_civicrm_buildForm($formName, &$form) {
 function fpptatweaks_civicrm_postProcess($formName, $form) {
   if ($formName == 'CRM_Profile_Form_Edit') {
     // get the fpptatweaks_new_relationship_profile value
-    $ufgroupID = Civi::settings()->get('fpptatweaks_new_relationship_profile');
+    $ufgroupId = Civi::settings()->get('fpptatweaks_new_relationship_profile');
     // proceed if match on the group id
-    if ($form->getVar('_gid') == $ufgroupID) {
-      $userCid = CRM_Core_Session::singleton()->getLoggedInContactID();
+    if ($form->getVar('_gid') == $ufgroupId) {
+      // The individual contact ID, whether newly created or dedupe-matched to an existing,
+      // is in $form->_id.
+      $individualId = $form->getVar('_id');
+
       $userDisplayName = CRM_Core_Session::singleton()->getLoggedInContactDisplayName();
-      $organizationID = $form->_submitValues['org_id'];
-      $relationshipType = $form->_submitValues['org_relationship'];
-      list($relationshipTypeId, $rpos1, $rpos2) = explode('_', $relationshipType);
-      $permission_column = "is_permission_{$rpos1}_{$rpos2}";
+      $organizationId = $form->_submitValues['org_id'];
+      list($relationshipTypeId, $rpos1, $rpos2) = explode('_', $form->_submitValues['org_relationship']);
+      $permissionColumn = "is_permission_{$rpos1}_{$rpos2}";
 
       $relationship = \Civi\Api4\Relationship::create()
-        ->addValue('contact_id_' . $rpos1, $organizationID)
-        ->addValue('contact_id_' . $rpos2, $form->getVar('_id'))
+        ->addValue('contact_id_' . $rpos1, $organizationId)
+        ->addValue('contact_id_' . $rpos2, $individualId)
         ->addValue('description', E::ts("Relationship created by request of {$userDisplayName}"))
-        ->addValue($permission_column, 1);
+        ->addValue($permissionColumn, 1)
+        ->addValue('relationship_type_id', $relationshipTypeId)
+        ->addValue('is_active', 0);
 
       if (Civi::settings()->get('fpptatweaks_new_relationship_tag')) {
-          $relationship->addValue('is_active', 0);
-          // This would also mean we're configured to tag such additional
-          // participant contacts for review; do so now.
-          if ($tagId = Civi::settings()->get('fpptatweaks_new_relationship_tag')) {
-            $entityTag = \Civi\Api4\EntityTag::create()
-              ->addValue('tag_id', $tagId)
-              ->addValue('entity_table', 'civicrm_contact')
-              ->addValue('entity_id', $form->getVar('_id'))
-              // We need to tag this contact, regardless of our write access to the contact; thus, skip perm checks.
-              ->setCheckPermissions(FALSE)
-              ->execute();
-          }
+        // This would also mean we're configured to tag such additional
+        // participant contacts for review; do so now.
+        if ($tagId = Civi::settings()->get('fpptatweaks_new_relationship_tag')) {
+          $entityTag = \Civi\Api4\EntityTag::create()
+            ->addValue('tag_id', $tagId)
+            ->addValue('entity_table', 'civicrm_contact')
+            ->addValue('entity_id', $individualId)
+            // We need to tag this contact, regardless of our write access to the contact; thus, skip perm checks.
+            ->setCheckPermissions(FALSE)
+            ->execute();
+        }
       }
-
-      $relationship->addValue('relationship_type_id', $relationshipTypeId);
 
       try {
         $relationship
@@ -391,8 +392,9 @@ function fpptatweaks_civicrm_postProcess($formName, $form) {
         if ($e->getMessage() != 'Duplicate Relationship') {
           throw $e;
         }
-        CRM_Core_Session::setStatus(E::ts('Your request is pending review by FPPTA staff'), '', 'success');
       }
+
+      CRM_Core_Session::setStatus(E::ts('Your request is pending review by FPPTA staff.'), '', 'success');
     }
   }
 }
