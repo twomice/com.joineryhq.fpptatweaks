@@ -331,7 +331,13 @@ function fpptatweaks_civicrm_buildForm($formName, &$form) {
         $bhfe[] = 'org_relationship';
         $form->assign('beginHookFormElements', $bhfe);
 
+        // TODO: use css to make table styling:        
+//    background: #eee;
+//    width: 100%;
+
         CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.fpptatweaks', 'js/CRM_Profile_Form_Edit.js');
+        
+        
       }
     }
   }

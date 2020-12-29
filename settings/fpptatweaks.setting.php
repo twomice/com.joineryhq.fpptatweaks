@@ -10,7 +10,7 @@ return array(
     'add' => '5.0',
     'is_domain' => 1,
     'is_contact' => 0,
-    'description' => E::ts('Which profile should display CPPT History; this list contains only profiles marked "%1".', [1 => E::ts('Display on Contact Dashboard?', ['domain' => 'com.joineryhq.cdashtabs'])] ),
+    'description' => E::ts('Which profile should display CPPT History; this list contains only profiles marked "%1".', [1 => E::ts('Display on Contact Dashboard?')]),
     'title' => E::ts('CPPT History Profile'),
     'type' => 'Int',
     'quick_form_type' => 'Element',

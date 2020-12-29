@@ -221,13 +221,13 @@ class CRM_Fpptatweaks_Form_Settings extends CRM_Core_Form {
     // Call all ufgroup
     $uFGroups = \Civi\Api4\UFGroup::get()
       ->execute();
-    foreach ($uFGroups as $uFGroup) {
+    foreach ($uFGroups as $ufGroup) {
       // Check if the join module is profile
-      $ufJoinRecords = CRM_Core_BAO_UFGroup::getUFJoinRecord($uFGroup['id']);
+      $ufJoinRecords = CRM_Core_BAO_UFGroup::getUFJoinRecord($ufGroup['id']);
       foreach ($ufJoinRecords as $key => $value) {
         if ($value == 'Profile') {
           // Add in the list of option if its profile
-          $options[$uFGroup['id']] = $uFGroup['frontend_title'] ?? $uFGroup['title'];
+          $options[$ufGroup['id']] = $ufGroup['frontend_title'] ?? $ufGroup['title'];
           continue;
         }
       }
@@ -240,7 +240,7 @@ class CRM_Fpptatweaks_Form_Settings extends CRM_Core_Form {
    *
    */
   public static function getTagList() {
-    $options = ['' => E::ts('- none -')] + CRM_Core_BAO_EntityTag::buildOptions('tag_id') + ['-1' => E::ts('- NONE: ENABLE PERMISSIONED RELATIONSHIPS -')];
+    $options = ['' => E::ts('- none -')] + CRM_Core_BAO_EntityTag::buildOptions('tag_id');
     return $options;
   }
 }
