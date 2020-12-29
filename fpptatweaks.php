@@ -16,7 +16,7 @@ function fpptatweaks_civicrm_alterTemplateFile($formName, &$form, $context, &$tp
    * as the 'cppt history profile' in settings. If so, we'll replace the template
    * with our own, and we'll fetch some data to populate that template.
    */
-  if($formName = 'CRM_Profile_Page_Dynamic' && $gid = $form->getVar('_gid')) {
+  if($formName == 'CRM_Profile_Page_Dynamic' && $gid = $form->getVar('_gid')) {
     $cpptHistoryGid = Civi::settings()->get('fpptatweaks_cppt_history_profile');
     if ($gid == $cpptHistoryGid) {
       // Specify we're using a different template.
