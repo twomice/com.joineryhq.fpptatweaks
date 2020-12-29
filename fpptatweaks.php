@@ -384,7 +384,6 @@ function fpptatweaks_civicrm_postProcess($formName, $form) {
           // We need to save this relationship, regardless of our write access to the contact; thus, skip perm checks.
           ->setCheckPermissions(FALSE)
           ->execute();
-          CRM_Core_Session::setStatus(E::ts('Your request has been filed, pending review by FPPTA staff'), '', 'success');
       }
       catch (Exception $e) {
         // If the error is because relationship already exists, we can ignore
@@ -392,6 +391,7 @@ function fpptatweaks_civicrm_postProcess($formName, $form) {
         if ($e->getMessage() != 'Duplicate Relationship') {
           throw $e;
         }
+        CRM_Core_Session::setStatus(E::ts('Your request is pending review by FPPTA staff'), '', 'success');
       }
     }
   }
