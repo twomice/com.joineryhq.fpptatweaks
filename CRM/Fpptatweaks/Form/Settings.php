@@ -201,19 +201,26 @@ class CRM_Fpptatweaks_Form_Settings extends CRM_Core_Form {
   }
 
   public static function getCpptHistoryProfileOptions() {
-    $options = [
-      '' => '-' . E::ts('none') . '-',
-    ];
-    $filteredUFGroupSettings = CRM_Cdashtabs_Settings::getFilteredSettings(TRUE, 'uf_group');
-    foreach ($filteredUFGroupSettings as $filteredUFGroupSetting) {
-      $gid = $filteredUFGroupSetting['uf_group_id'];
-      $ufGroupResult = civicrm_api3('UFGroup', 'get', [
-        'sequential' => 1,
-        'return' => ["frontend_title", "title"],
-        'id' => $gid,
-      ]);
-      $ufGroup = $ufGroupResult['values'][0];
-      $options[$gid] = $ufGroup['frontend_title'] ?? $ufGroup['title'];
+    if (is_callable('CRM_Cdashtabs_Settings::getFilteredSettings')) {
+      $options = [
+        '' => '-' . E::ts('none') . '-',
+      ];
+      $filteredUFGroupSettings = CRM_Cdashtabs_Settings::getFilteredSettings(TRUE, 'uf_group');
+      foreach ($filteredUFGroupSettings as $filteredUFGroupSetting) {
+        $gid = $filteredUFGroupSetting['uf_group_id'];
+        $ufGroupResult = civicrm_api3('UFGroup', 'get', [
+          'sequential' => 1,
+          'return' => ["frontend_title", "title"],
+          'id' => $gid,
+        ]);
+        $ufGroup = $ufGroupResult['values'][0];
+        $options[$gid] = $ufGroup['frontend_title'] ?? $ufGroup['title'];
+      }
+    }
+    else {
+      $options = [
+        '' => '-' . E::ts('N/A: requires Contact Dashboard Tabs extension') . '-',
+      ];
     }
     return $options;
 
