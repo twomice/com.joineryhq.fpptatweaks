@@ -53,10 +53,14 @@ class CRM_Fpptatweaks_Form_Reqendrship extends CRM_Core_Form {
 
     // add form elements
     $this->add(
-      'textarea', // field type
-      'comment', // field name
-      E::ts('Comment'), // field label
-      TRUE // is required
+      // field type
+      'textarea',
+      // field name
+      'comment',
+      // field label
+      E::ts('Comment'),
+      // is required
+      TRUE
     );
     $this->addButtons(array(
       array(

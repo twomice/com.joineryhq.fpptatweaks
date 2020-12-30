@@ -16,7 +16,7 @@ function fpptatweaks_civicrm_alterTemplateFile($formName, &$form, $context, &$tp
    * as the 'cppt history profile' in settings. If so, we'll replace the template
    * with our own, and we'll fetch some data to populate that template.
    */
-  if($formName == 'CRM_Profile_Page_Dynamic' && $gid = $form->getVar('_gid')) {
+  if ($formName == 'CRM_Profile_Page_Dynamic' && $gid = $form->getVar('_gid')) {
     $cpptHistoryGid = Civi::settings()->get('fpptatweaks_cppt_history_profile');
     if ($gid == $cpptHistoryGid) {
       // Specify we're using a different template.
@@ -228,12 +228,13 @@ function fpptatweaks_civicrm_pageRun(&$page) {
     CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.fpptatweaks', 'js/fpptatweaks.js', 100, 'page-footer');
   }
 }
+
 /**
  * Log CiviCRM API errors to CiviCRM log.
  */
 function _fpptatweaks_log_api_error(CiviCRM_API3_Exception $e, string $entity, string $action, array $params) {
-  $message = "CiviCRM API Error '{$entity}.{$action}': ". $e->getMessage() .'; ';
-  $message .= "API parameters when this error happened: ". json_encode($params) .'; ';
+  $message = "CiviCRM API Error '{$entity}.{$action}': " . $e->getMessage() . '; ';
+  $message .= "API parameters when this error happened: " . json_encode($params) . '; ';
   $bt = debug_backtrace();
   $error_location = "{$bt[1]['file']}::{$bt[1]['line']}";
   $message .= "Error API called from: $error_location";
@@ -292,8 +293,6 @@ function fpptatweaks_civicrm_navigationMenu(&$menu) {
  *
  * Set a default value for an event price set field.
  *
- * @param string $formName
- * @param CRM_Core_Form $form
  */
 function fpptatweaks_civicrm_buildForm($formName, &$form) {
   if ($formName == 'CRM_Profile_Form_Edit') {
@@ -319,7 +318,7 @@ function fpptatweaks_civicrm_buildForm($formName, &$form) {
         $form->add('select', 'org_relationship', E::ts("Relationship"), $relationshipTypeOptions, TRUE, [
           'class' => 'crm-select2',
           'style' => 'width: 100%;',
-          'placeholder' => '- ' . E::ts('Select') . '-'
+          'placeholder' => '- ' . E::ts('Select') . '-',
         ]);
 
         $tpl = CRM_Core_Smarty::singleton();
@@ -340,8 +339,6 @@ function fpptatweaks_civicrm_buildForm($formName, &$form) {
 /**
  * Implements hook_civicrm_postProcess().
  *
- * @param string $formName
- * @param CRM_Core_Form $form
  */
 function fpptatweaks_civicrm_postProcess($formName, $form) {
   if ($formName == 'CRM_Profile_Form_Edit') {

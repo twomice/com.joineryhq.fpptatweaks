@@ -20,7 +20,7 @@ return array(
       'class' => 'crm-select2',
       'style' => "width:auto;",
     ),
-    'X_options_callback' => 'CRM_Fpptatweaks_Form_Settings::getCpptHistoryProfileOptions'
+    'X_options_callback' => 'CRM_Fpptatweaks_Form_Settings::getCpptHistoryProfileOptions',
   ),
   'fpptatweaks_new_relationship_profile' => array(
     'group_name' => 'New Relationship Profile',
@@ -39,7 +39,7 @@ return array(
       'class' => 'crm-select2',
       'style' => "width:auto;",
     ),
-    'X_options_callback' => 'CRM_Fpptatweaks_Form_Settings::getUFGroupList'
+    'X_options_callback' => 'CRM_Fpptatweaks_Form_Settings::getUFGroupList',
   ),
   'fpptatweaks_new_relationship_tag' => array(
     'group_name' => 'New Relationship Tag',
@@ -58,6 +58,6 @@ return array(
       'class' => 'crm-select2',
       'style' => "width:auto;",
     ),
-    'X_options_callback' => 'CRM_Fpptatweaks_Form_Settings::getTagList'
+    'X_options_callback' => 'CRM_Fpptatweaks_Form_Settings::getTagList',
   ),
- );
+);
