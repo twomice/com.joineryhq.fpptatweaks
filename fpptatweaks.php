@@ -363,6 +363,9 @@ function fpptatweaks_civicrm_buildForm($formName, &$form) {
 
         CRM_Core_Resources::singleton()->addStyleFile('com.joineryhq.fpptatweaks', 'css/CRM_Profile_Form_Edit.css', 100, 'page-header');
       }
+      else {
+        CRM_Core_Error::statusBounce(E::ts('You do not have any organizations for which you can submit new relationships.'));
+      }
     }
   }
 }
