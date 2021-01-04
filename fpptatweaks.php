@@ -51,6 +51,37 @@ function fpptatweaks_civicrm_alterTemplateFile($formName, &$form, $context, &$tp
 }
 
 /**
+ * Implements hook_civicrm_alterContent().
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_alterContent
+ */
+function fpptatweaks_civicrm_alterContent(&$content, $context, $tplName, &$object) {
+  if ($context == 'page' && ($object->getVar('_name') == 'CRM_Contact_Page_View_UserDashBoard')) {
+    $ufgroupId = Civi::settings()->get('fpptatweaks_new_relationship_profile');
+
+    if (!$ufgroupId) {
+      // If there's no known ufgroup id, we can't display the button, so return.
+      return;
+    }
+
+    // Calls to profile page->run() below will change the page title, and
+    // there's not much we can do about that. Store the current page title
+    // here so we can change it back afterward.
+    $originalTitle = CRM_Utils_System::$title;
+
+    $tpl = CRM_Core_Smarty::singleton();
+    $tpl->assign('ufgroupId', $ufgroupId);
+    $fpptatweaksContent = $tpl->fetch('CRM/Fpptatweaks/snippet/injectedButton.tpl');
+    $content .= $fpptatweaksContent;
+
+    // Re-set the page title to original; it probably was chagned above.
+    if (isset($originalTitle)) {
+      CRM_Utils_System::setTitle($originalTitle);
+    }
+  }
+}
+
+/**
  * Implements hook_civicrm_config().
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_config/
