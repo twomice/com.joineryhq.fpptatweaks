@@ -57,27 +57,24 @@ function fpptatweaks_civicrm_alterTemplateFile($formName, &$form, $context, &$tp
  */
 function fpptatweaks_civicrm_alterContent(&$content, $context, $tplName, &$object) {
   if ($context == 'page' && ($object->getVar('_name') == 'CRM_Contact_Page_View_UserDashBoard')) {
+    // NOTE: Javascript relevant to this page is added in fpptatweaks_civicrm_pageRun().
+    $userCid = CRM_Core_Session::singleton()->getLoggedInContactID();
+    if (!CRM_Fpptatweaks_Util::hasPermissionedRelatedContact($userCid, 'Organization')) {
+      // If user has no permissioned relationships to organizations, they can't use the button, so return.
+      return;
+    }
     $ufgroupId = Civi::settings()->get('fpptatweaks_new_relationship_profile');
-
     if (!$ufgroupId) {
       // If there's no known ufgroup id, we can't display the button, so return.
       return;
     }
 
-    // Calls to profile page->run() below will change the page title, and
-    // there's not much we can do about that. Store the current page title
-    // here so we can change it back afterward.
-    $originalTitle = CRM_Utils_System::$title;
-
+    // Process the snippet template and inject the parsed content.
     $tpl = CRM_Core_Smarty::singleton();
     $tpl->assign('ufgroupId', $ufgroupId);
     $fpptatweaksContent = $tpl->fetch('CRM/Fpptatweaks/snippet/injectedButton.tpl');
     $content .= $fpptatweaksContent;
 
-    // Re-set the page title to original; it probably was chagned above.
-    if (isset($originalTitle)) {
-      CRM_Utils_System::setTitle($originalTitle);
-    }
   }
 }
 
@@ -256,6 +253,7 @@ function fpptatweaks_civicrm_pageRun(&$page) {
   $pageName = $page->getVar('_name');
 
   if ($pageName == 'CRM_Contact_Page_View_UserDashBoard') {
+    // Must add script file here because it can't be  done from fpptatweaks_civicrm_alterContent().
     CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.fpptatweaks', 'js/fpptatweaks.js', 100, 'page-footer');
   }
 }
