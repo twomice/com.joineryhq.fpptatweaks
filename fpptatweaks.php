@@ -59,7 +59,9 @@ function fpptatweaks_civicrm_alterContent(&$content, $context, $tplName, &$objec
   if ($context == 'page' && ($object->getVar('_name') == 'CRM_Contact_Page_View_UserDashBoard')) {
     // NOTE: Javascript relevant to this page is added in fpptatweaks_civicrm_pageRun().
     $userCid = CRM_Core_Session::singleton()->getLoggedInContactID();
-    if (!CRM_Fpptatweaks_Util::hasPermissionedRelatedContact($userCid, 'Organization')) {
+    $relatedOrgs = CRM_Fpptatweaks_Util::getPermissionedContacts($userCid, NULL, NULL, 'Organization');
+
+    if (!$object->_contactId || !array_key_exists($object->_contactId, $relatedOrgs)) {
       // If user has no permissioned relationships to organizations, they can't use the button, so return.
       return;
     }
@@ -72,6 +74,7 @@ function fpptatweaks_civicrm_alterContent(&$content, $context, $tplName, &$objec
     // Process the snippet template and inject the parsed content.
     $tpl = CRM_Core_Smarty::singleton();
     $tpl->assign('ufgroupId', $ufgroupId);
+    $tpl->assign('orgId', $object->_contactId);
     $fpptatweaksContent = $tpl->fetch('CRM/Fpptatweaks/snippet/injectedButton.tpl');
     $content .= $fpptatweaksContent;
 
@@ -361,6 +364,8 @@ function fpptatweaks_civicrm_buildForm($formName, &$form) {
 
         CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.fpptatweaks', 'js/CRM_Profile_Form_Edit.js');
         CRM_Core_Resources::singleton()->addStyleFile('com.joineryhq.fpptatweaks', 'css/CRM_Profile_Form_Edit.css', 100, 'page-header');
+
+        $form->setDefaults(['org_id' => CRM_Utils_Request::retrieve('orgId', 'Integer')]);
       }
       else {
         CRM_Core_Error::statusBounce(E::ts('You do not have any organizations for which you can submit new relationships.'));
