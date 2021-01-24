@@ -97,6 +97,16 @@ class CRM_Fpptatweaks_Form_Reqendrship extends CRM_Core_Form {
       ->addValue('subject', $subject)
       ->addValue('End_relationship_details.Relationship_type_name', $this->get('relationship_type'))
       ->addValue('source_contact_id', CRM_Core_Session::getLoggedInContactID())
+      ->addChain('name_me_0', \Civi\Api4\ActivityContact::create()
+        ->addValue('activity_id', '$id')
+        ->addValue('record_type_id:name', 'Activity Targets')
+        ->addValue('contact_id', $this->get('contact_id_b'))
+      )
+      ->addChain('name_me_1', \Civi\Api4\ActivityContact::create()
+        ->addValue('activity_id', '$id')
+        ->addValue('record_type_id:name', 'Activity Targets')
+        ->addValue('contact_id', $this->get('contact_id_a'))
+      )
       ->execute();
 
     CRM_Core_Session::setStatus($subject, E::ts('Request filed, pending review by FPPTA staff'));

@@ -5,13 +5,15 @@ use CRM_Fpptatweaks_ExtensionUtil as E;
  * Collection of upgrade steps.
  */
 class CRM_Fpptatweaks_Upgrader extends CRM_Fpptatweaks_Upgrader_Base {
+
   /**
    * Override parent.
    */
   protected function executeCustomDataFileByAbsPath($xml_file) {
     try {
       return parent::executeCustomDataFileByAbsPath($xml_file);
-    } catch (Exception $ex) {
+    }
+    catch (Exception $ex) {
       // If the exception is because a db entity already exists, we'll ignore it.
       // This is expected (and a core bug IMO) if uninstalling/reinstalling an
       // extension that uses auto_install.xml for custom data.
@@ -19,9 +21,8 @@ class CRM_Fpptatweaks_Upgrader extends CRM_Fpptatweaks_Upgrader_Base {
         throw $ex;
       }
     }
-    
   }
-  
+
   // By convention, functions that look like "function upgrade_NNNN()" are
   // upgrade tasks. They are executed in order (like Drupal's hook_update_N).
 
@@ -40,15 +41,10 @@ class CRM_Fpptatweaks_Upgrader extends CRM_Fpptatweaks_Upgrader_Base {
    * created during the installation (e.g., a setting or a managed entity), do
    * so here to avoid order of operation problems.
    */
-  // public function postInstall() {
-  //  $customFieldId = civicrm_api3('CustomField', 'getvalue', array(
-  //    'return' => array("id"),
-  //    'name' => "customFieldCreatedViaManagedHook",
-  //  ));
-  //  civicrm_api3('Setting', 'create', array(
-  //    'myWeirdFieldSetting' => array('id' => $customFieldId, 'weirdness' => 1),
-  //  ));
-  // }
+  public function postInstall() {
+    // Create more custom data groups and fields from xml file.
+    $this->executeCustomDataFile('xml/auto_install_4204.xml');
+  }
 
   /**
    * Example: Run an external SQL script when the module is uninstalled.
@@ -77,13 +73,11 @@ class CRM_Fpptatweaks_Upgrader extends CRM_Fpptatweaks_Upgrader_Base {
    * @return TRUE on success
    * @throws Exception
    */
-  // public function upgrade_4200() {
-  //   $this->ctx->log->info('Applying update 4200');
-  //   CRM_Core_DAO::executeQuery('UPDATE foo SET bar = "whiz"');
-  //   CRM_Core_DAO::executeQuery('DELETE FROM bang WHERE willy = wonka(2)');
-  //   return TRUE;
-  // }
-
+  public function upgrade_4204() {
+    // Create more custom data groups and fields from xml file.
+    $this->executeCustomDataFile('xml/auto_install_4204.xml');
+    return TRUE;
+  }
 
   /**
    * Example: Run an external SQL script.

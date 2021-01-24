@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<CustomData>
+  <CustomGroups>
+    <CustomGroup>
+      <name>Start_relationship_details</name>
+      <title>Start relationship details</title>
+      <extends>Activity</extends>
+      <extends_entity_column_value>Request relationship start</extends_entity_column_value>
+      <extends_entity_column_value_option_group>activity_type</extends_entity_column_value_option_group>
+      <style>Inline</style>
+      <collapse_display>0</collapse_display>
+      <help_pre></help_pre>
+      <help_post></help_post>
+      <weight>13</weight>
+      <is_active>1</is_active>
+      <is_multiple>0</is_multiple>
+      <collapse_adv_display>0</collapse_adv_display>
+      <is_reserved>0</is_reserved>
+      <is_public>1</is_public>
+      <icon></icon>
+    </CustomGroup>
+  </CustomGroups>
+  <CustomFields>
+    <CustomField>
+      <name>RshipStart_Contact_Org</name>
+      <label>Organization</label>
+      <data_type>ContactReference</data_type>
+      <html_type>Autocomplete-Select</html_type>
+      <is_search_range>0</is_search_range>
+      <weight>1</weight>
+      <is_active>1</is_active>
+      <is_view>1</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <in_selector>0</in_selector>
+      <custom_group_name>Start_relationship_details</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>RshipStart_Contact_Indiv</name>
+      <label>Individual</label>
+      <data_type>ContactReference</data_type>
+      <html_type>Autocomplete-Select</html_type>
+      <is_search_range>0</is_search_range>
+      <weight>2</weight>
+      <is_active>1</is_active>
+      <is_view>1</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <in_selector>0</in_selector>
+      <custom_group_name>Start_relationship_details</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>RshipStart_Relationship_type_name</name>
+      <label>Relationship type name</label>
+      <data_type>String</data_type>
+      <html_type>Text</html_type>
+      <is_search_range>0</is_search_range>
+      <weight>3</weight>
+      <is_active>1</is_active>
+      <is_view>1</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <in_selector>0</in_selector>
+      <custom_group_name>Start_relationship_details</custom_group_name>
+    </CustomField>
+  </CustomFields>
+</CustomData>

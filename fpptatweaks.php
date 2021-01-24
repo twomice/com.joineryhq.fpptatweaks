@@ -429,6 +429,50 @@ function fpptatweaks_civicrm_postProcess($formName, $form) {
         }
       }
 
+      // Create an activity recording this "new relationship" request.
+      $activityTypeOptionValue = \Civi\Api4\OptionValue::get()
+        ->addWhere('option_group_id', '=', 2)
+        ->addWhere('name', '=', 'Request relationship start')
+        ->execute()
+        ->first();
+      $contactIndividual = \Civi\Api4\Contact::get()
+        ->addSelect('display_name')
+        ->addWhere('id', '=', $individualId)
+        ->execute()
+        ->first();
+      $contactOrganization = \Civi\Api4\Contact::get()
+        ->addSelect('display_name')
+        ->addWhere('id', '=', $organizationId)
+        ->execute()
+        ->first();
+      $relationshipType = \Civi\Api4\RelationshipType::get()
+        ->addSelect('label_b_a')
+        ->addWhere('id', '=', $relationshipTypeId)
+        ->execute()
+        ->first();
+      $subject = E::ts('User requests: add %1 (%2 / %3)', [
+        '1' => $relationshipType['label_b_a'],
+        '2' => $contactIndividual['display_name'],
+        '3' => $contactOrganization['display_name'],
+      ]);
+      $relationshipCreate = \Civi\Api4\Activity::create()
+        ->addValue('activity_type_id', $activityTypeOptionValue['value'])
+        ->addValue('Start_relationship_details.RshipStart_Contact_Org', $organizationId)
+        ->addValue('Start_relationship_details.RshipStart_Contact_Indiv', $individualId)
+        ->addValue('subject', $subject)
+        ->addValue('Start_relationship_details.RshipStart_Relationship_type_name', $relationshipType['label_b_a'])
+        ->addValue('source_contact_id', CRM_Core_Session::getLoggedInContactID())
+        ->addChain('name_me_0', \Civi\Api4\ActivityContact::create()
+          ->addValue('activity_id', '$id')
+          ->addValue('record_type_id:name', 'Activity Targets')
+          ->addValue('contact_id', $organizationId)
+        )
+        ->addChain('name_me_1', \Civi\Api4\ActivityContact::create()
+          ->addValue('activity_id', '$id')
+          ->addValue('record_type_id:name', 'Activity Targets')
+          ->addValue('contact_id', $individualId)
+        )
+        ->execute();
       CRM_Core_Session::setStatus(E::ts('Your request is pending review by FPPTA staff.'), '', 'success');
     }
   }
