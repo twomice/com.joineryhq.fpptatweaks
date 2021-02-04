@@ -6,8 +6,10 @@ CRM.$(function($) {
           relOrgIcon = $('> td:nth-child(2) a:first-child', this).html(),
           relOrgText = $('> td:nth-child(2) a:nth-child(2)', this).text();
 
-      $('> td:first-child', this).append('<span>' + relText + '</span>').find('a:first-child').remove();
-      $('> td:nth-child(2)', this).append(relOrgIcon + '<span>' + relOrgText + '</span>').find('a').remove();
+      if($('> td:first-child a', this).length) {
+        $('> td:first-child', this).append('<span>' + relText + '</span>').find('a:first-child').remove();
+        $('> td:nth-child(2)', this).append(relOrgIcon + '<span>' + relOrgText + '</span>').find('a').remove();
+      }
 
       // Insert 'remove' link
       requestEndRelationshipUrl = CRM.url('civicrm/fppta/reqendrship', {rid: $(this).attr('data-id')});
