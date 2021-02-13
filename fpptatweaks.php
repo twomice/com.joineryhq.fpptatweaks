@@ -372,6 +372,10 @@ function fpptatweaks_civicrm_buildForm($formName, &$form) {
       }
     }
   }
+  elseif ($formName == 'CRM_Contribute_Form_Search') {
+    // Remove default values for 'status' field in search criteria.
+    $form->setDefaults(['contribution_status_id' => 0 ]);
+  }
 }
 
 /**
