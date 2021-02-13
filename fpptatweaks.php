@@ -477,3 +477,31 @@ function fpptatweaks_civicrm_postProcess($formName, $form) {
     }
   }
 }
+
+/**
+ * Implements hook_civicrm_searchColumns().
+ *
+ */
+function fpptatweaks_civicrm_searchColumns( $objectName, &$headers,  &$rows, &$selector ) {
+  // Check if it is seasrch contribution
+  if ($objectName == 'contribution') {
+    // Insert additional column header in the tab
+    $insertedHeader = [
+      'name' => E::ts('Inv #'),
+      'field_name' => 'invoice_number',
+      'direction' => CRM_Utils_Sort::DONTCARE,
+      'weight' => 45,
+    ];
+    $headers[7] = $insertedHeader;
+
+    // Insert value of the column header
+    foreach ($rows as $key => $value) {
+      $contributions = \Civi\Api4\Contribution::get()
+        ->addWhere('id', '=', $value['contribution_id'])
+        ->execute()
+        ->first();
+
+      $rows[$key]['invoice_number'] = $contributions['invoice_number'];
+    }
+  }
+}
