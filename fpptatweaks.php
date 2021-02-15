@@ -492,16 +492,18 @@ function fpptatweaks_civicrm_searchColumns( $objectName, &$headers,  &$rows, &$s
       'direction' => CRM_Utils_Sort::DONTCARE,
       'weight' => 45,
     ];
-    $headers[7] = $insertedHeader;
+    $headers[] = $insertedHeader;
 
-    // Insert value of the column header
-    foreach ($rows as $key => $value) {
-      $contributions = \Civi\Api4\Contribution::get()
-        ->addWhere('id', '=', $value['contribution_id'])
-        ->execute()
-        ->first();
+    $contributionIds = CRM_Utils_Array::collect('contribution_id', $rows);
+    $keyPerContributionId = array_flip($contributionIds);
 
-      $rows[$key]['invoice_number'] = $contributions['invoice_number'];
+    $contributions = \Civi\Api4\Contribution::get()
+      ->addSelect('id', 'invoice_number')
+      ->addWhere('id', 'IN', $contributionIds)
+      ->execute();
+
+    foreach ($contributions as $contribution) {
+      $rows[$keyPerContributionId[$contribution['id']]]['invoice_number'] = $contribution['invoice_number'];
     }
   }
 }
