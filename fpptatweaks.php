@@ -487,8 +487,9 @@ function fpptatweaks_civicrm_postProcess($formName, $form) {
  *
  */
 function fpptatweaks_civicrm_searchColumns( $objectName, &$headers,  &$rows, &$selector ) {
-  // Check if it is seasrch contribution
-  if ($objectName == 'contribution') {
+  // Check if it is search contribution
+  // !empty($rows) will prevent sql error if contact doesn't have contribution
+  if ($objectName == 'contribution' && !empty($rows)) {
     // Insert additional column header in the tab
     $insertedHeader = [
       'name' => E::ts('Inv #'),
