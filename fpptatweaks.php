@@ -489,7 +489,18 @@ function fpptatweaks_civicrm_postProcess($formName, $form) {
 function fpptatweaks_civicrm_searchColumns( $objectName, &$headers,  &$rows, &$selector ) {
   // Check if it is search contribution
   // !empty($rows) will prevent sql error if contact doesn't have contribution
-  if ($objectName == 'contribution' && !empty($rows)) {
+  if (
+    ($objectName == 'contribution'
+    || $objectName == 'event')
+    && !empty($rows)
+  ) {
+    // Since we don't want it to apply in event and contribution search, we will just return
+    if (CRM_Utils_System::getUrlPath() == 'civicrm/event/search'
+      || CRM_Utils_System::getUrlPath() == 'civicrm/contribute/search'
+    ) {
+      return;
+    }
+
     // Insert additional column header in the tab
     $insertedHeader = [
       'name' => E::ts('Inv #'),
@@ -497,18 +508,55 @@ function fpptatweaks_civicrm_searchColumns( $objectName, &$headers,  &$rows, &$s
       'direction' => CRM_Utils_Sort::DONTCARE,
       'weight' => 45,
     ];
-    $headers[] = $insertedHeader;
 
-    $contributionIds = CRM_Utils_Array::collect('contribution_id', $rows);
-    $keyPerContributionId = array_flip($contributionIds);
+    if ($objectName == 'event') {
+      // Column position of the inserted header, this is also useful
+      // ..when injecting the js for the value
+      $insertHeaderPosition = 5;
+      array_splice( $headers, $insertHeaderPosition, 0, [$insertedHeader] );
+      // Add weight on the header for the final position of the columns
+      foreach ($headers as $headerKey => $header) {
+        $headers[$headerKey]['weight'] = $headerKey;
+      }
+
+      // Get participantIds array of column data
+      $participantIdsPerRow = CRM_Utils_Array::collect('participant_id', $rows);
+      $contributionIdsPerRow = [];
+      // Loop participantIds array to get contribution ID
+      foreach ($participantIdsPerRow as $rowKey => $participantId) {
+        $paymentDetails = civicrm_api3('ParticipantPayment', 'get', [
+          'sequential' => 1,
+          'participant_id' => $participantId,
+        ]);
+
+        // Save contributionIds as array
+        $contributionIdsPerRow[$rowKey] = $paymentDetails['values'][0]['contribution_id'];
+      }
+
+      // Flip for the rows position
+      $rowKeyPerContributionId = array_flip($contributionIdsPerRow);
+    }
+    else if ($objectName == 'contribution') {
+      $headers[] = $insertedHeader;
+      $contributionIdsPerRow = CRM_Utils_Array::collect('contribution_id', $rows);
+      $rowKeyPerContributionId = array_flip($contributionIdsPerRow);
+    }
 
     $contributions = \Civi\Api4\Contribution::get()
       ->addSelect('id', 'invoice_number')
-      ->addWhere('id', 'IN', $contributionIds)
+      ->addWhere('id', 'IN', $contributionIdsPerRow)
       ->execute();
 
     foreach ($contributions as $contribution) {
-      $rows[$keyPerContributionId[$contribution['id']]]['invoice_number'] = $contribution['invoice_number'];
+      $rows[$rowKeyPerContributionId[$contribution['id']]]['invoice_number'] = $contribution['invoice_number'];
+    }
+
+    if ($objectName == 'event') {
+      // Inject data in js
+      $fpptatweaks['eventRows'] = $rows;
+      $fpptatweaks['columnPosition'][] = $insertHeaderPosition;
+      CRM_Core_Resources::singleton()->addVars('fpptatweaks', $fpptatweaks);
+      CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.fpptatweaks', 'js/searchColumns_event.js', 100, 'page-footer');
     }
   }
 }
