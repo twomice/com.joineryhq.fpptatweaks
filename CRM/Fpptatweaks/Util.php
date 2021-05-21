@@ -7,6 +7,7 @@ class CRM_Fpptatweaks_Util {
   public static function getRelationshipTypeOptions($otherContactType) {
     $relationshipTypeOptions = [];
     $relationshipTypes = \Civi\Api4\RelationshipType::get()
+      ->setCheckPermissions(FALSE)
       ->addWhere('is_active', '=', 1)
       ->addClause('OR',
         [
@@ -22,7 +23,6 @@ class CRM_Fpptatweaks_Util {
           ],
         ]
       )
-      ->setCheckPermissions(FALSE)
       ->execute();
     foreach ($relationshipTypes as $relationshipType) {
       if ($relationshipType['contact_type_a'] == $otherContactType) {

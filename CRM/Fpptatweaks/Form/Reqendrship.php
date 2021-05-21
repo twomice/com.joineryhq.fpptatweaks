@@ -23,14 +23,18 @@ class CRM_Fpptatweaks_Form_Reqendrship extends CRM_Core_Form {
       $this->set('rid', $rid);
 
       $relationship = \Civi\Api4\Relationship::get()
+        ->setCheckPermissions(FALSE)
         ->addWhere('id', '=', $rid)
         ->addChain('contact_b', \Civi\Api4\Contact::get()
+          ->setCheckPermissions(FALSE)
           ->addWhere('id', '=', '$contact_id_b'),
           0)
         ->addChain('contact_a', \Civi\Api4\Contact::get()
+          ->setCheckPermissions(FALSE)
           ->addWhere('id', '=', '$contact_id_a'),
           0)
         ->addChain('relationship_type', \Civi\Api4\RelationshipType::get()
+          ->setCheckPermissions(FALSE)
           ->addWhere('id', '=', '$relationship_type_id'),
           0)
         ->execute()
@@ -79,6 +83,7 @@ class CRM_Fpptatweaks_Form_Reqendrship extends CRM_Core_Form {
     $values = $this->exportValues();
     // create "end relationship request" activity
     $activityTypeOptionValue = \Civi\Api4\OptionValue::get()
+          ->setCheckPermissions(FALSE)
       ->addWhere('option_group_id', '=', 2)
       ->addWhere('name', '=', 'Request relationship end')
       ->execute()
@@ -90,6 +95,7 @@ class CRM_Fpptatweaks_Form_Reqendrship extends CRM_Core_Form {
       '3' => $this->get('contact_name_b'),
     ]);
     $results = \Civi\Api4\Activity::create()
+      ->setCheckPermissions(FALSE)
       ->addValue('activity_type_id', $activityTypeOptionValue['value'])
       ->addValue('End_relationship_details.Contact_A', $this->get('contact_id_a'))
       ->addValue('End_relationship_details.Contact_B', $this->get('contact_id_b'))
@@ -98,11 +104,13 @@ class CRM_Fpptatweaks_Form_Reqendrship extends CRM_Core_Form {
       ->addValue('End_relationship_details.Relationship_type_name', $this->get('relationship_type'))
       ->addValue('source_contact_id', CRM_Core_Session::getLoggedInContactID())
       ->addChain('name_me_0', \Civi\Api4\ActivityContact::create()
+        ->setCheckPermissions(FALSE)
         ->addValue('activity_id', '$id')
         ->addValue('record_type_id:name', 'Activity Targets')
         ->addValue('contact_id', $this->get('contact_id_b'))
       )
       ->addChain('name_me_1', \Civi\Api4\ActivityContact::create()
+        ->setCheckPermissions(FALSE)
         ->addValue('activity_id', '$id')
         ->addValue('record_type_id:name', 'Activity Targets')
         ->addValue('contact_id', $this->get('contact_id_a'))

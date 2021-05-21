@@ -32,6 +32,7 @@ function fpptatweaks_civicrm_alterTemplateFile($formName, &$form, $context, &$tp
       // Get CPPT History data for this contact.
       // Api4 makes multi-value custom values easy.
       $cpptHistories = \Civi\Api4\CustomValue::get('CPPT_History')
+        ->setCheckPermissions(FALSE)
         ->addWhere('entity_id', '=', $cid)
         ->addOrderBy('Event_Date', 'DESC')
         ->setLimit(0)
@@ -398,6 +399,7 @@ function fpptatweaks_civicrm_postProcess($formName, $form) {
       $permissionColumn = "is_permission_{$rpos1}_{$rpos2}";
 
       $relationship = \Civi\Api4\Relationship::create()
+        ->setCheckPermissions(FALSE)
         ->addValue('contact_id_' . $rpos1, $organizationId)
         ->addValue('contact_id_' . $rpos2, $individualId)
         ->addValue('description', E::ts("Relationship created by request of {$userDisplayName}"))
@@ -410,11 +412,11 @@ function fpptatweaks_civicrm_postProcess($formName, $form) {
         // participant contacts for review; do so now.
         if ($tagId = Civi::settings()->get('fpptatweaks_new_relationship_tag')) {
           $entityTag = \Civi\Api4\EntityTag::create()
+            ->setCheckPermissions(FALSE)
             ->addValue('tag_id', $tagId)
             ->addValue('entity_table', 'civicrm_contact')
             ->addValue('entity_id', $individualId)
             // We need to tag this contact, regardless of our write access to the contact; thus, skip perm checks.
-            ->setCheckPermissions(FALSE)
             ->execute();
         }
       }
@@ -435,21 +437,25 @@ function fpptatweaks_civicrm_postProcess($formName, $form) {
 
       // Create an activity recording this "new relationship" request.
       $activityTypeOptionValue = \Civi\Api4\OptionValue::get()
+        ->setCheckPermissions(FALSE)
         ->addWhere('option_group_id', '=', 2)
         ->addWhere('name', '=', 'Request relationship start')
         ->execute()
         ->first();
       $contactIndividual = \Civi\Api4\Contact::get()
+        ->setCheckPermissions(FALSE)
         ->addSelect('display_name')
         ->addWhere('id', '=', $individualId)
         ->execute()
         ->first();
       $contactOrganization = \Civi\Api4\Contact::get()
+        ->setCheckPermissions(FALSE)
         ->addSelect('display_name')
         ->addWhere('id', '=', $organizationId)
         ->execute()
         ->first();
       $relationshipType = \Civi\Api4\RelationshipType::get()
+        ->setCheckPermissions(FALSE)
         ->addSelect('label_b_a')
         ->addWhere('id', '=', $relationshipTypeId)
         ->execute()
@@ -460,6 +466,7 @@ function fpptatweaks_civicrm_postProcess($formName, $form) {
         '3' => $contactOrganization['display_name'],
       ]);
       $relationshipCreate = \Civi\Api4\Activity::create()
+        ->setCheckPermissions(FALSE)
         ->addValue('activity_type_id', $activityTypeOptionValue['value'])
         ->addValue('Start_relationship_details.RshipStart_Contact_Org', $organizationId)
         ->addValue('Start_relationship_details.RshipStart_Contact_Indiv', $individualId)
@@ -467,11 +474,13 @@ function fpptatweaks_civicrm_postProcess($formName, $form) {
         ->addValue('Start_relationship_details.RshipStart_Relationship_type_name', $relationshipType['label_b_a'])
         ->addValue('source_contact_id', CRM_Core_Session::getLoggedInContactID())
         ->addChain('name_me_0', \Civi\Api4\ActivityContact::create()
+          ->setCheckPermissions(FALSE)
           ->addValue('activity_id', '$id')
           ->addValue('record_type_id:name', 'Activity Targets')
           ->addValue('contact_id', $organizationId)
         )
         ->addChain('name_me_1', \Civi\Api4\ActivityContact::create()
+          ->setCheckPermissions(FALSE)
           ->addValue('activity_id', '$id')
           ->addValue('record_type_id:name', 'Activity Targets')
           ->addValue('contact_id', $individualId)
@@ -543,6 +552,7 @@ function fpptatweaks_civicrm_searchColumns( $objectName, &$headers,  &$rows, &$s
     }
 
     $contributions = \Civi\Api4\Contribution::get()
+      ->setCheckPermissions(FALSE)
       ->addSelect('id', 'invoice_number')
       ->addWhere('id', 'IN', $contributionIdsPerRow)
       ->execute();

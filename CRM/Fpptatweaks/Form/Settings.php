@@ -236,6 +236,7 @@ class CRM_Fpptatweaks_Form_Settings extends CRM_Core_Form {
     ];
     // Call all ufgroup
     $uFGroups = \Civi\Api4\UFGroup::get()
+      ->setCheckPermissions(FALSE)
       ->execute();
     foreach ($uFGroups as $ufGroup) {
       // Check if the join module is profile
