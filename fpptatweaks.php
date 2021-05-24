@@ -375,7 +375,7 @@ function fpptatweaks_civicrm_buildForm($formName, &$form) {
   }
   elseif ($formName == 'CRM_Contribute_Form_Search') {
     // Remove default values for 'status' field in search criteria.
-    $form->setDefaults(['contribution_status_id' => 0 ]);
+    $form->setDefaults(['contribution_status_id' => 0]);
   }
 }
 
@@ -495,7 +495,7 @@ function fpptatweaks_civicrm_postProcess($formName, $form) {
  * Implements hook_civicrm_searchColumns().
  *
  */
-function fpptatweaks_civicrm_searchColumns( $objectName, &$headers,  &$rows, &$selector ) {
+function fpptatweaks_civicrm_searchColumns($objectName, &$headers, &$rows, &$selector) {
   // Check if it is search contribution
   // !empty($rows) will prevent sql error if contact doesn't have contribution
   if (
@@ -522,7 +522,7 @@ function fpptatweaks_civicrm_searchColumns( $objectName, &$headers,  &$rows, &$s
       // Column position of the inserted header, this is also useful
       // ..when injecting the js for the value
       $insertHeaderPosition = 5;
-      array_splice( $headers, $insertHeaderPosition, 0, [$insertedHeader] );
+      array_splice($headers, $insertHeaderPosition, 0, [$insertedHeader]);
       // Add weight on the header for the final position of the columns
       foreach ($headers as $headerKey => $header) {
         $headers[$headerKey]['weight'] = $headerKey;
@@ -545,7 +545,7 @@ function fpptatweaks_civicrm_searchColumns( $objectName, &$headers,  &$rows, &$s
       // Flip for the rows position
       $rowKeyPerContributionId = array_flip($contributionIdsPerRow);
     }
-    else if ($objectName == 'contribution') {
+    elseif ($objectName == 'contribution') {
       $headers[] = $insertedHeader;
       $contributionIdsPerRow = CRM_Utils_Array::collect('contribution_id', $rows);
       $rowKeyPerContributionId = array_flip($contributionIdsPerRow);

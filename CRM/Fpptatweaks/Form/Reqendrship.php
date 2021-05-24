@@ -83,7 +83,7 @@ class CRM_Fpptatweaks_Form_Reqendrship extends CRM_Core_Form {
     $values = $this->exportValues();
     // create "end relationship request" activity
     $activityTypeOptionValue = \Civi\Api4\OptionValue::get()
-          ->setCheckPermissions(FALSE)
+      ->setCheckPermissions(FALSE)
       ->addWhere('option_group_id', '=', 2)
       ->addWhere('name', '=', 'Request relationship end')
       ->execute()
