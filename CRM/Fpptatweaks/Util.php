@@ -1,6 +1,8 @@
 <?php
 
+// phpcs:disable
 use CRM_Fpptatweaks_ExtensionUtil as E;
+// phpcs:enable
 
 class CRM_Fpptatweaks_Util {
 
