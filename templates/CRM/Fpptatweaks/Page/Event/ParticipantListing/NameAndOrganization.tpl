@@ -10,6 +10,19 @@
 {* Displays participant listing for an event. *}
 {if $rows}
     {include file="CRM/common/pager.tpl" location="top"}
+    {* $printLinkUrl is only defined when we're NOT printing to pdf. Therefore we
+     * use this to decide whether to show content on screen vs pdf.
+     *}
+    {if $printLinkUrl}
+      {* We are NOT in pdf mode. *}
+      <a id="crm-fpptatweaks-print-link" href="{$printLinkUrl}" class="button">
+        <span><i class="crm-i fa-print" aria-hidden="true"></i> Print as PDF</span>
+      </a>
+    {else}
+      {* We ARE in pdf mode. *}
+      <h1>{$pageTitle}</h1>
+    {/if}
+    
        <table cellpadding="0" cellspacing="0" border="0">
          <tr class="columnheader">
         {foreach from=$headers item=header}
