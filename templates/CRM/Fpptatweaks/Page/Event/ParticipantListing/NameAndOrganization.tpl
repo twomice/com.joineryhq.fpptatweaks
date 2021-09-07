@@ -27,12 +27,7 @@
          <tr class="columnheader">
         {foreach from=$headers item=header}
         <th scope="col">
-        {if $header.sort}
-          {assign var='key' value=$header.sort}
-          {$sort->_response.$key.link}
-        {else}
           {$header.name}
-        {/if}
         </th>
       {/foreach}
          </tr>

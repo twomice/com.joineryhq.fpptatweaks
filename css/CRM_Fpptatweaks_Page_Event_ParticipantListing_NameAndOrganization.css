@@ -9,6 +9,7 @@ tr.columnheader a {
 
 tr.columnheader th {
   text-align: left;
+  padding: .5em 0;
 }
 
 tr td {
