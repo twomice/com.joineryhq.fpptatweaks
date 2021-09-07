@@ -28,9 +28,9 @@ class CRM_Fpptatweaks_Upgrader extends CRM_Fpptatweaks_Upgrader_Base {
 
   /**
    * Example: Run an external SQL script when the module is installed.
-   *
+   */
   public function install() {
-    $this->executeSqlFile('sql/myinstall.sql');
+    self::upgrade_4205();
   }
 
   /**
@@ -76,6 +76,39 @@ class CRM_Fpptatweaks_Upgrader extends CRM_Fpptatweaks_Upgrader_Base {
   public function upgrade_4204() {
     // Create more custom data groups and fields from xml file.
     $this->executeCustomDataFile('xml/auto_install_4204.xml');
+    return TRUE;
+  }
+
+  /**
+   * Add a new option to the participant_listing option group
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_4205() {
+    // Get max value of existing option values:
+    $optionValues = \Civi\Api4\OptionValue::get()
+      ->setCheckPermissions(FALSE)
+      ->addWhere('option_group_id:name', '=', 'participant_listing')
+      ->setLimit(0)
+      ->execute();
+    $values = CRM_Utils_Array::collect('value', (array) $optionValues);
+    $maxValue = max($values);
+
+    // Create new option with next value.
+    $newCdashtabsOption = \Civi\Api4\OptionValue::create()
+      ->setCheckPermissions(FALSE)
+      ->addValue('option_group_id:name', 'participant_listing')
+      ->addValue('description', 'CRM_Fpptatweaks_Page_Event_ParticipantListing_NameAndOrganization')
+      ->addValue('label', 'Name and Organization')
+      ->addValue('name', 'FpptaTweaks_Name_and_Organization')
+      ->addValue('value', ++$maxValue)
+      ->addValue('filter', 0)
+      ->addValue('is_optgroup', FALSE)
+      ->addValue('is_reserved', FALSE)
+      ->addValue('is_active', 1)
+      ->execute();
+
     return TRUE;
   }
 

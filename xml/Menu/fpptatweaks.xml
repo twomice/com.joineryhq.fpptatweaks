@@ -12,4 +12,10 @@
     <title>Request to remove relationship</title>
     <access_arguments>access Contact Dashboard</access_arguments>
   </item>
+  <item>
+    <path>civicrm/event/participant/name-and-org</path>
+    <page_callback>CRM_Fpptatweaks_Page_Event_ParticipantListing_NameAndOrganization</page_callback>
+    <title>Event_ParticipantListing_NameAndOrganization</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
 </menu>
