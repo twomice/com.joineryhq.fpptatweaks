@@ -22,7 +22,7 @@ class CRM_Fpptatweaks_Page_Event_ParticipantListing_NameAndOrganization extends 
     );
     $pageTitle = ts('%1 - Participants', [1 => $this->_eventTitle]);
     CRM_Utils_System::setTitle($pageTitle);
-    $this->assign('pageTitle', $pageTitle);
+    $this->assign('fpptaTweaksPageTitle', $pageTitle);
 
     // we do not want to display recently viewed contacts since this is potentially a public page
     $this->assign('displayRecent', FALSE);
@@ -79,7 +79,8 @@ class CRM_Fpptatweaks_Page_Event_ParticipantListing_NameAndOrganization extends 
     $this->assign_by_ref('rows', $rows);
 
     CRM_Core_Resources::singleton()->addStyleFile('com.joineryhq.fpptatweaks', 'css/CRM_Fpptatweaks_Page_Event_ParticipantListing_NameAndOrganization.css');
-    if (!$this->_print) {
+    if (empty($this->_print)) {
+      CRM_Core_Resources::singleton()->addStyleFile('com.joineryhq.fpptatweaks', 'css/CRM_Fpptatweaks_Page_Event_ParticipantListing_NameAndOrganization_print.css');
       $printLinkUrl = CRM_Utils_System::url('civicrm/event/participant', "reset=1&id={$this->_id}&snippet=3");
       $this->assign('printLinkUrl', $printLinkUrl);
     }

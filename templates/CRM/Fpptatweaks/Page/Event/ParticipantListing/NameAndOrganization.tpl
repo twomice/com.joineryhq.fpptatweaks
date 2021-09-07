@@ -20,7 +20,7 @@
       </a>
     {else}
       {* We ARE in pdf mode. *}
-      <h1>{$pageTitle}</h1>
+      <h1>{$fpptaTweaksPageTitle}</h1>
     {/if}
     
        <table cellpadding="0" cellspacing="0" border="0">
