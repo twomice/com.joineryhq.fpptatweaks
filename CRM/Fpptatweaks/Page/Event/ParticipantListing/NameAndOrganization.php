@@ -42,20 +42,16 @@ class CRM_Fpptatweaks_Page_Event_ParticipantListing_NameAndOrganization extends 
             AND ov.filter = 1
         INNER JOIN civicrm_option_group og on og.id = ov.option_group_id
           AND og.name = 'participant_role'
-        LEFT JOIN civicrm_relationship r ON r.relationship_type_id = 5
-          AND r.is_active = 1
-          AND (
-            r.end_date is null
-            OR r.end_date > now()
-          )
-          AND r.contact_id_a = c.id
-        LEFT JOIN civicrm_contact ec ON ec.id = r.contact_id_b
+        LEFT JOIN civicrm_contact ec
+          ON ec.id = c.employer_id
+          AND ec.is_deleted = 0
     ";
 
     $whereClause = "
       WHERE p.event_id = %1
-      AND      p.is_test = 0
-      AND      p.status_id IN ( 1, 2 )
+      AND   p.is_test = 0
+      AND   p.status_id IN ( 1, 2 )
+      AND   c.is_deleted = 0
     ";
 
     $params = [1 => [$this->_id, 'Integer']];
