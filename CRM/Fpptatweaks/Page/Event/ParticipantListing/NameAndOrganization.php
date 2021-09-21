@@ -50,7 +50,7 @@ class CRM_Fpptatweaks_Page_Event_ParticipantListing_NameAndOrganization extends 
     $whereClause = "
       WHERE p.event_id = %1
       AND   p.is_test = 0
-      AND   p.status_id IN ( 1, 2 )
+      AND   p.status_id IN ( 1, 2, 5 )
       AND   c.is_deleted = 0
     ";
 
