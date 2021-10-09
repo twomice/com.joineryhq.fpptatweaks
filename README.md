@@ -30,7 +30,7 @@ Please follow [the usual instructions for installing a CiviCRM extension](https:
 No configuration is necessary. This extension performs its work automatically when enabled.
 
 ## Support
-![screenshot](/images/joinery-logo.png)
+![Joinery logo](/images/joinery-logo.png)
 
 Joinery provides services for CiviCRM including custom extension development, 
 training, data migrations, and more. We aim to keep this extension in good 
