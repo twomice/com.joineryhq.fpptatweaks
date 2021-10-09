@@ -1,7 +1,7 @@
 CRM.$(function($) {
   CRM.$( document ).ajaxStop(function() {
     var requestEndRelationshipUrl;
-    CRM.$('.crm-contact--selector-user tbody > tr').each(function(){
+    CRM.$('.crm-contact-relationship-user tbody > tr').each(function(){
       var relText = $('> td:first-child a', this).text(),
           relOrgIcon = $('> td:nth-child(2) a:first-child', this).html(),
           relOrgText = $('> td:nth-child(2) a:nth-child(2)', this).text();
