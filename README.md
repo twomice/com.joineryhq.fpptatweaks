@@ -2,10 +2,17 @@
 
 Specialized CiviCRM modifications for FPPTA:
 
+* Provide a Settings page at Administer > Customize Data and Screens > FPPTA Tweaks Settings, with these settings:
+  * CPPT History Profile: (Requires cdashtabs extension) Select an existing CiviCRM profile to be used as the display content for the "CPPT History" tab on a tabbed contact dashboard.
+  * New Relationship Profile: Select an existing CiviCRM profile for use in requesting creation of a new organization/individual relationship.
+  * New Relationship Tag: Select an existing tag to be applie to individual contacts for whom a new organization/individual relationship has been requested.
+* Provide a "Request End Relationship" form for requesting removal of an existing organization/individual relationship.
 * On the CiviCRM user dashboard (https://drupal.example.org/civicrm/user), under the "Your Contacts / Organizations" section:	
 	* Replace all clickable links with equivalent non-clickable plain text in the "Relationship" column and the (unlabeled) Contact Name column.
-	* Remove the "Disable" link in the (unlabeled) Actions column.
-
+	* Replace the "Disable" link in the (unlabeled) Actions column with a "Remove" link which points to the "Request End Relationship" form.
+* Provide a new participant listing type: "Name and Organization".
+* Add Invoice Number column in event and contribution search.
+* Remove default values for 'status' field in search criteria on Find Contributions.
 
 The extension is licensed under [GPL-3.0](LICENSE.txt).
 
