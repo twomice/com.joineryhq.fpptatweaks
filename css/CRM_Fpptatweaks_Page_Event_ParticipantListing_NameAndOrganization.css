@@ -20,3 +20,13 @@ tr td {
 table {
   width: 100%;
 }
+
+table#fppta-participant-listing-header {
+  margin-bottom: 3em;
+}
+table#fppta-participant-listing-header td {
+  border: none;
+}
+table#fppta-participant-listing-header img {
+  padding-right: 3em;
+}

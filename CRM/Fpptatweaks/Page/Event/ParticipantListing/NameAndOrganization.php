@@ -81,6 +81,12 @@ class CRM_Fpptatweaks_Page_Event_ParticipantListing_NameAndOrganization extends 
       $this->assign('printLinkUrl', $printLinkUrl);
     }
 
+    // Change $this->_name because parent::run() will use _name as the downloaded
+    // pdf filename.
+    // TODO: changing $this->_name works fine here (for now) because we're so close
+    // to the end of execution, but in general it seems risky to alter an auto-generated
+    // property like this.
+    $this->_name = 'FPPTA_participant_listing';
     return parent::run();
   }
 

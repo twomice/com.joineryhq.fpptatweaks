@@ -20,7 +20,14 @@
       </a>
     {else}
       {* We ARE in pdf mode. *}
-      <h1>{$fpptaTweaksPageTitle}</h1>
+      <table id="fppta-participant-listing-header">
+        <tr>
+          <td><img src="{crmResURL ext=com.joineryhq.fpptatweaks file=images/fppta_logo.png}"/></td>
+          <td>
+            <h1>{$fpptaTweaksPageTitle}</h1>
+          </td>
+        </tr>
+      </table>
     {/if}
     
        <table cellpadding="0" cellspacing="0" border="0">
