@@ -257,6 +257,10 @@ function fpptatweaks_civicrm_pageRun(&$page) {
   $pageName = $page->getVar('_name');
 
   if ($pageName == 'CRM_Contact_Page_View_UserDashBoard') {
+    // Add primary member names to membership types.
+    _fpptatweaks_dashboard_add_primary_name_to_membership_type('activeMembers', $page);
+    _fpptatweaks_dashboard_add_primary_name_to_membership_type('inActiveMembers', $page);
+
     // Must add script file here because it can't be  done from fpptatweaks_civicrm_alterContent().
     CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.fpptatweaks', 'js/fpptatweaks.js', 100, 'page-footer');
   }
@@ -569,4 +573,33 @@ function fpptatweaks_civicrm_searchColumns($objectName, &$headers, &$rows, &$sel
       CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.fpptatweaks', 'js/searchColumns_event.js', 100, 'page-footer');
     }
   }
+}
+
+/**
+ * For each "membership by relationship", insert the name of the primary member after the membership type.
+ *
+ * @param string $membershipGrouping The name of the visual grouping of membership rows: either 'activeMembers' or 'inactiveMembers'
+ * @param object $page The current civicrm page, as provided in the argument to hook_civicrm_pageRun().
+ * @return void
+ */
+function _fpptatweaks_dashboard_add_primary_name_to_membership_type($membershipGrouping, &$page) {
+  $members = $page->get_template_vars($membershipGrouping);
+  if (empty($members)) {
+    // No memberships of this grouping exist, so nothing to do. Just return.
+    return;
+  }
+  foreach ($members as &$member) {
+    if (!empty($member['owner_membership_id'])) {
+      $primaryMembership = _fpptatweaks_civicrmapi('membership', 'get', [
+        'sequential' => 1,
+        'id' => $member['owner_membership_id'],
+        'api.Contact.get' => ['return' => ["display_name"]],
+      ]);
+      if (!empty($primaryMembership['values'][0]['api.Contact.get']['values'][0]['display_name'])) {
+        $displayName = $primaryMembership['values'][0]['api.Contact.get']['values'][0]['display_name'];
+        $member['membership_type'] .= " &mdash; " . E::ts('by relationship to <em>%1</em>', [1 => $displayName]);
+      }
+    }
+  }
+  $page->assign($membershipGrouping, $members);
 }
