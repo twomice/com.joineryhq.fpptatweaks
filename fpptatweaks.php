@@ -6,6 +6,27 @@ use CRM_Fpptatweaks_ExtensionUtil as E;
 // phpcs:enable
 
 /**
+ * Implements hook_civicrm_links().
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_links
+ */
+function fpptatweaks_civicrm_links($op, $objectName, $objectId, &$links, &$mask, &$values) {
+  if ($op == "view.contact.userDashBoard" && $objectName == 'Contact') {
+    // Hijack the the 'view contact dashboard' link so it points to our handler.
+    // (This handler will always redirect to the current User Dashboard URL,
+    // instead of civicrm's "civicrm/user" url.)
+    $dashLink = &$links[CRM_Core_Action::VIEW];
+    // Change the url.
+    $dashLink['url'] = 'civicrm/fppta/mydashboard';
+    // Add a custom attribute that we can use in javascript (fpptatweaks.js) to
+    // identify these links and manipulate them further. (Because this hook is probably
+    // (but not certainly) firing in an ajax call, we can't actually be sure of
+    // the user dashboard URL in this context, so we do that part in JS.)
+    $dashLink['extra'] = 'x-fpptatweaks-is-dashboard-link';
+  }
+}
+
+/**
  * Implements hook_civicrm_alterTemplateFile().
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_alterTemplateFile

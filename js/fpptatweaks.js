@@ -13,7 +13,11 @@ CRM.$(function($) {
     CRM.$('.crm-dashboard-civievent .view-content .description').hide();
 
     // Tweak contents of the "Your Contacts / Organizations" secion.
-    var requestEndRelationshipUrl;
+    var requestEndRelationshipUrl, dasbhoardLink;
+    // Store the current page url as a base64 string (because we're going to append
+    // this value as a query string parameter, and we want to avoid potential url
+    // syntax/encoding problems.
+    var dashbase = btoa(window.location.href);
     CRM.$('.crm-contact-relationship-user tbody > tr').each(function(){
       // Remove link to relationship (in "Relationship" column"), and
       // also remove link to related contact (in second column).
@@ -31,6 +35,11 @@ CRM.$(function($) {
 
       // Remove 'disable relationship' link
       $('> td:last-child a[title="Disable Relationship"]', this).remove();
+
+      // Append 'dashbase' param to Dashboard links (for use by CRM_Fpptatweaks_Page_MyDashboard)
+      // (The [x-fpptatweaks-is-dashboard-link] attribute is added in fpptatweaks_civicrm_links().)
+      dashboardLink = $('[x-fpptatweaks-is-dashboard-link]', this)[0];
+      dashboardLink.href += '&dashbase=' + dashbase;
     });
   });
 

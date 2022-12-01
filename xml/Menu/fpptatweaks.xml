@@ -18,4 +18,11 @@
     <title>Event_ParticipantListing_NameAndOrganization</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/fppta/mydashboard</path>
+    <page_callback>CRM_Fpptatweaks_Page_MyDashboard</page_callback>
+    <is_public>true</is_public>
+    <title>MyDashboard</title>
+    <access_arguments>access Contact Dashboard</access_arguments>
+  </item>
 </menu>
