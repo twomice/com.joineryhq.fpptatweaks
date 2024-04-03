@@ -212,11 +212,17 @@ function fpptatweaks_civicrm_entityTypes(&$entityTypes) {
  */
 function fpptatweaks_civicrm_pageRun(&$page) {
   $pageName = $page->getVar('_name');
-
   if ($pageName == 'CRM_Contact_Page_View_UserDashBoard') {
     // Add primary member names to membership types.
     _fpptatweaks_dashboard_add_primary_name_to_membership_type('activeMembers', $page);
     _fpptatweaks_dashboard_add_primary_name_to_membership_type('inActiveMembers', $page);
+
+    // Replace Financial Type with Source for each row in "Your Contribution(s)"
+    $contributeRows = $page->getTemplateVars('contribute_rows') ?? [];
+    foreach ($contributeRows as &$contributionRow) {
+      $contributionRow['financial_type'] = $contributionRow['source'];
+    }
+    $page->assign('contribute_rows', $contributeRows);
 
     // Must add script file here because it can't be  done from fpptatweaks_civicrm_alterContent().
     CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.fpptatweaks', 'js/fpptatweaks.js', 100, 'page-footer');
