@@ -219,10 +219,16 @@ function fpptatweaks_civicrm_pageRun(&$page) {
 
     // Replace Financial Type with Source for each row in "Your Contribution(s)"
     $contributeRows = $page->get_template_vars('contribute_rows') ?? [];
-    foreach ($contributeRows as &$contributionRow) {
-      $contributionRow['financial_type'] = $contributionRow['source'];
+    foreach ($contributeRows as &$contributeRow) {
+      $contributeRow['financial_type'] = $contributeRow['source'];
     }
     $page->assign('contribute_rows', $contributeRows);
+    // Replace Financial Type with Source for each row in "Your Contribution(s)"
+    $softCreditContributions = $page->get_template_vars('soft_credit_contributions') ?? [];
+    foreach ($softCreditContributions as &$softCreditContribution) {
+      $softCreditContribution['financial_type'] = $softCreditContribution['source'];
+    }
+    $page->assign('soft_credit_contributions', $softCreditContributions);
 
     // Must add script file here because it can't be  done from fpptatweaks_civicrm_alterContent().
     CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.fpptatweaks', 'js/fpptatweaks.js', 100, 'page-footer');
