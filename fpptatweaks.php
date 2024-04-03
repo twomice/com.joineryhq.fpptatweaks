@@ -218,7 +218,7 @@ function fpptatweaks_civicrm_pageRun(&$page) {
     _fpptatweaks_dashboard_add_primary_name_to_membership_type('inActiveMembers', $page);
 
     // Replace Financial Type with Source for each row in "Your Contribution(s)"
-    $contributeRows = $page->getTemplateVars('contribute_rows') ?? [];
+    $contributeRows = $page->get_template_vars('contribute_rows') ?? [];
     foreach ($contributeRows as &$contributionRow) {
       $contributionRow['financial_type'] = $contributionRow['source'];
     }

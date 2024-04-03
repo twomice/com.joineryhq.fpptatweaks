@@ -44,12 +44,11 @@ CRM.$(function($) {
         dashboardLink.href += '&dashbase=' + dashbase;
       }
     });
-
-    // Tweak contents of "Your Contribution(s)":
-    // Replace 'Finicancial Type' table header with 'Source'
-    $('.crm-dashboard-civicontribute .view-content table tr th:nth-child(2)').html(ts('Source'));
-
   });
+
+  // Tweak contents of "Your Contribution(s)":
+  // Replace 'Finicancial Type' table header with 'Source'
+  $('.crm-dashboard-civicontribute .view-content table tr th:nth-child(2)').html(ts('Source'));
 
   // Check if there is an injected element
   if ($('.fpptatweaks-inject').length) {
