@@ -12,7 +12,7 @@ Specialized CiviCRM modifications for FPPTA:
 	* Replace all clickable links with equivalent non-clickable plain text in the "Relationship" column and the (unlabeled) Contact Name column.
 	* Replace the "Disable" link in the (unlabeled) Actions column with a "Remove" link which points to the "Request End Relationship" form.
   * Under the "Your Contribution(s)" section:
-    * Replace "Financial Type" with "Source"
+    * Alter the columns which are displayed (e.g. add Source and Invoice Number columns; remove Total Amount column)
 * Provide a new participant listing type: "Name and Organization".
 * Add Invoice Number column in event and contribution search.
 * Remove default values for 'status' field in search criteria on Find Contributions.
