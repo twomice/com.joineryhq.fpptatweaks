@@ -46,11 +46,6 @@ CRM.$(function($) {
     });
   });
 
-  // Tweak contents of "Your Contribution(s)":
-  // Replace 'Finicancial Type' table header with 'Source'
-  $('.crm-dashboard-civicontribute .view-content table:eq(0) tr th:nth-child(2)').html(ts('Source'));
-  $('.crm-dashboard-civicontribute .view-content table:eq(1) tr th:nth-child(4)').html(ts('Source'));
-
   // Check if there is an injected element
   if ($('.fpptatweaks-inject').length) {
     // Get the injected element

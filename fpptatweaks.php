@@ -217,16 +217,29 @@ function fpptatweaks_civicrm_pageRun(&$page) {
     _fpptatweaks_dashboard_add_primary_name_to_membership_type('activeMembers', $page);
     _fpptatweaks_dashboard_add_primary_name_to_membership_type('inActiveMembers', $page);
 
-    // Replace Financial Type with Source for each row in "Your Contribution(s)"
+    // Add 'invoice_number' to each row data in "Your Contribution(s)"
     $contributeRows = $page->get_template_vars('contribute_rows') ?? [];
+    $contributionGet = _fpptatweaks_civicrmapi('contribution', 'get', [
+      'return' => ["invoice_number"],
+      'id' => ['IN' => CRM_Utils_Array::collect('id', $contributeRows)],
+    ]);
+    $contributionAdditionalValues = $contributionGet['values'];
     foreach ($contributeRows as &$contributeRow) {
-      $contributeRow['financial_type'] = $contributeRow['source'];
+      $contributionId = $contributeRow['id'];
+      $contributeRow['invoice_number'] = $contributionAdditionalValues[$contributionId]['invoice_number'];
     }
     $page->assign('contribute_rows', $contributeRows);
-    // Replace Financial Type with Source for each row in "Your Contribution(s)"
+
+    // Add 'invoice_number' to each row data in "contributions made on your behalf"
     $softCreditContributions = $page->get_template_vars('soft_credit_contributions') ?? [];
+    $contributionGet = _fpptatweaks_civicrmapi('contribution', 'get', [
+      'return' => ["invoice_number"],
+      'id' => ['IN' => CRM_Utils_Array::collect('id', $softCreditContributions)],
+    ]);
+    $contributionAdditionalValues = $contributionGet['values'];
     foreach ($softCreditContributions as &$softCreditContribution) {
-      $softCreditContribution['financial_type'] = $softCreditContribution['source'];
+      $contributionId = $softCreditContribution['id'];
+      $softCreditContribution['invoice_number'] = $contributionAdditionalValues[$contributionId]['invoice_number'];
     }
     $page->assign('soft_credit_contributions', $softCreditContributions);
 
