@@ -8,6 +8,9 @@ Specialized CiviCRM modifications for FPPTA:
   * New Relationship Tag: Select an existing tag to be applie to individual contacts for whom a new organization/individual relationship has been requested.
 * Provide a "Request End Relationship" form for requesting removal of an existing organization/individual relationship.
 * On the CiviCRM user dashboard (https://drupal.example.org/civicrm/user):
+  * Add a class to <body> indicating whether this is (or is not) the user's own dashboard, one of:
+    * `fpptatweaks-dashboard-is-my-contact-true`
+    * `fpptatweaks-dashboard-is-my-contact-false`
   * Under the "Your Contacts / Organizations" section:
 	* Replace all clickable links with equivalent non-clickable plain text in the "Relationship" column and the (unlabeled) Contact Name column.
 	* Replace the "Disable" link in the (unlabeled) Actions column with a "Remove" link which points to the "Request End Relationship" form.
