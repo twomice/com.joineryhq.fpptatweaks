@@ -7,7 +7,7 @@ class CRM_Fpptatweaks_Page_MyDashboard extends CRM_Core_Page {
     // This page will simply redirect to whatever base URL is defined in $_GET['dashbase'],
     // after appending the appropriate query string parameters for the given dashboard contact.
     // $_GET['dashbase'] was set as a base64 encoding of the live user dashboard url
-    // in fpptatweaks.js.
+    // in CRM_Contact_Page_View_UserDashBoard.js.
     
     // Start by decoding dashbase to an actual url.
     $dashbase = base64_decode($_GET['dashbase']);

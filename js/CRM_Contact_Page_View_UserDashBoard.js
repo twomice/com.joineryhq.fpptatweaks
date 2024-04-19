@@ -55,4 +55,13 @@ CRM.$(function($) {
     // Remove injected element
     $('.fpptatweaks-inject').remove();
   }
+
+  // Wnen dashboard is viewed in front end (e.g. fppta.org/my-dashboard), we must
+  // add a class to the body to distinguish whether user is viewing their own
+  // dashboard or that of a related contact. This will allow CSS rules (in WP theme)
+  // to hide the "edit my profile" button (or any other similar behavior limited by
+  // this condition).
+  if (CRM.vars.fpptatweaks.bodyClass) {
+    $('body').addClass(CRM.vars.fpptatweaks.bodyClass);
+  }
 });

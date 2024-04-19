@@ -18,7 +18,7 @@ function fpptatweaks_civicrm_links($op, $objectName, $objectId, &$links, &$mask,
     $dashLink = &$links[CRM_Core_Action::VIEW];
     // Change the url.
     $dashLink['url'] = 'civicrm/fppta/mydashboard';
-    // Add a custom attribute that we can use in javascript (fpptatweaks.js) to
+    // Add a custom attribute that we can use in javascript (CRM_Contact_Page_View_UserDashBoard.js) to
     // identify these links and manipulate them further. (Because this hook is probably
     // (but not certainly) firing in an ajax call, we can't actually be sure of
     // the user dashboard URL in this context, so we do that part in JS.)
@@ -243,8 +243,13 @@ function fpptatweaks_civicrm_pageRun(&$page) {
     }
     $page->assign('soft_credit_contributions', $softCreditContributions);
 
-    // Must add script file here because it can't be  done from fpptatweaks_civicrm_alterContent().
-    CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.fpptatweaks', 'js/fpptatweaks.js', 100, 'page-footer');
+    // Must add script file and vars here because it can't be  done from fpptatweaks_civicrm_alterContent().
+    CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.fpptatweaks', 'js/CRM_Contact_Page_View_UserDashBoard.js', 100, 'page-footer');
+
+    $jsVars = [
+      'bodyClass' => 'fpptatweaks-dashboard-is-my-contact-' . ($page->_contactId == CRM_Core_Session::getLoggedInContactID() ? 'true' : 'false'),
+    ];
+    CRM_Core_Resources::singleton()->addVars('fpptatweaks', $jsVars);
   }
 }
 
