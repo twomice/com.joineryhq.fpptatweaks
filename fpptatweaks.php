@@ -184,9 +184,14 @@ function fpptatweaks_civicrm_entityTypes(&$entityTypes) {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_preProcess
  */
-//function fpptatweaks_civicrm_preProcess($formName, &$form) {
-//
-//}
+function fpptatweaks_civicrm_preProcess(string $formName, \CRM_Core_Form $form): void {
+  if ($formName == 'CRM_Contact_Form_RelatedContact') {
+    if ($dashboardPath = Civi::settings()->get('fpptatweaks_dashboard_path')) {
+      $session = CRM_Core_Session::singleton();
+      $session->replaceUserContext(CRM_Utils_System::url($dashboardPath, "reset=1"));
+    }
+  }
+}
 
 /**
  * Implements hook_civicrm_navigationMenu().

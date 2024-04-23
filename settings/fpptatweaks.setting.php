@@ -60,4 +60,17 @@ return array(
     ),
     'X_options_callback' => 'CRM_Fpptatweaks_Form_Settings::getTagList',
   ),
+  'fpptatweaks_dashboard_path' => array(
+    'group_name' => 'URL path to "My Dashboard" page',
+    'group' => 'fpptatweaks',
+    'name' => 'fpptatweaks_dashboard_path',
+    'add' => '5.0',
+    'is_domain' => 1,
+    'is_contact' => 0,
+    'description' => 'Omit "http://fppta.org/"',
+    'title' => E::ts('URL path to "My Dashboard" page'),
+    'type' => 'String',
+    'quick_form_type' => 'Element',
+    'html_type' => 'Text',
+  ),
 );

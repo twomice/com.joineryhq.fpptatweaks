@@ -98,7 +98,7 @@ class CRM_Fpptatweaks_Form_Settings extends CRM_Core_Form {
 
     $this->addButtons(array(
       array(
-        'type' => 'submit',
+        'type' => 'done',
         'name' => E::ts('Submit'),
         'isDefault' => TRUE,
       ),
@@ -117,14 +117,13 @@ class CRM_Fpptatweaks_Form_Settings extends CRM_Core_Form {
     $this->assign('elementNames', $this->getRenderableElementNames());
 
     $session = CRM_Core_Session::singleton();
-    $session->pushUserContext(CRM_Utils_System::url('civicrm/admin/fpptatweaks/section', 'reset=1', TRUE));
+    $session->pushUserContext(CRM_Utils_System::url('civicrm/admin/fpptatweaks/settings', "reset=1"));
     parent::buildQuickForm();
   }
 
   public function postProcess() {
     $this->_submittedValues = $this->exportValues();
     $this->saveSettings();
-    // CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/admin/fpptatweaks/section', 'reset=1'));
     parent::postProcess();
   }
 
