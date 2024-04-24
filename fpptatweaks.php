@@ -186,7 +186,15 @@ function fpptatweaks_civicrm_entityTypes(&$entityTypes) {
  */
 function fpptatweaks_civicrm_preProcess(string $formName, \CRM_Core_Form $form): void {
   if ($formName == 'CRM_Contact_Form_RelatedContact') {
-    if ($dashboardUrl = Civi::settings()->get('fpptatweaks_dashboard_url')
+    if (
+      // Only do this if we're running under WP and we're NOT in the WP admin area
+      // (obviously this is a civicrm-native extension, and this won't have any
+      // effect under another UF/CMS. However, this extension is custom for
+      // fppta, who only uses WP. If fppta later moves to Drupal or other CMS,
+      // we'll have to revisit this, but that's unlikely).
+      is_callable('is_admin')
+      && !is_admin()
+      && $dashboardUrl = Civi::settings()->get('fpptatweaks_dashboard_url')
     ) {
       if (preg_match('/^https?:\/\//', $dashboardUrl)) {
         $session = CRM_Core_Session::singleton();
