@@ -20,8 +20,9 @@ Specialized CiviCRM modifications for FPPTA:
 * When editing a related contact via the CiviCRM User Dashboard:
   * Upon save, redirect to the URL path specified in the 'URL path to "My Dashboard" page' setting, rather than CiviCRM's core User Dashboard URL ('civicrm/user').
 * Provide a new participant listing type: "Name and Organization".
-* Add Invoice Number column in event and contribution search.
+* Add Invoice Number column in event and contribution search results.
 * Remove default values for 'status' field in search criteria on Find Contributions.
+* For the "On Behalf of Organization" profile in contribution pages, remove the "Enter a new organization" option, thus requiring the user to select among their list of existing organizations.
 
 The extension is licensed under [GPL-3.0](LICENSE.txt).
 
