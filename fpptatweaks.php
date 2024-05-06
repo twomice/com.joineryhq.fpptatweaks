@@ -381,9 +381,11 @@ function fpptatweaks_civicrm_buildForm($formName, &$form) {
     }
   }
   elseif ($formName == 'CRM_Contribute_Form_Contribution_Main') {
-    // Never allow the "Enter a new organization" option, per F#1436; so we just remove that radio option.
-    $orgOptionElement = $form->getElement('org_option');
-    unset($orgOptionElement->_elements[1]);
+    // Never allow the "Enter a new organization" option, per F#1436; so we just remove that radio option (if it exists).
+    if (isset($form->_elementIndex[$element])) {
+      $orgOptionElement = $form->getElement('org_option');
+      unset($orgOptionElement->_elements[1]);
+    }
   }
   elseif ($formName == 'CRM_Contribute_Form_Search') {
     // Remove default values for 'status' field in search criteria.
