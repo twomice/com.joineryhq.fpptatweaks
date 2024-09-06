@@ -487,6 +487,7 @@ function fpptatweaks_civicrm_postProcess($formName, $form) {
         ->addValue('subject', $subject)
         ->addValue('Start_relationship_details.RshipStart_Relationship_type_name', $relationshipType['label_b_a'])
         ->addValue('source_contact_id', CRM_Core_Session::getLoggedInContactID())
+        ->addValue('status_id:name', 'Scheduled')
         ->addChain('name_me_0', \Civi\Api4\ActivityContact::create()
           ->setCheckPermissions(FALSE)
           ->addValue('activity_id', '$id')

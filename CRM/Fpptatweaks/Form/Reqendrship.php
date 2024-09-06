@@ -103,6 +103,7 @@ class CRM_Fpptatweaks_Form_Reqendrship extends CRM_Core_Form {
       ->addValue('subject', $subject)
       ->addValue('End_relationship_details.Relationship_type_name', $this->get('relationship_type'))
       ->addValue('source_contact_id', CRM_Core_Session::getLoggedInContactID())
+      ->addValue('status_id:name', 'Scheduled')
       ->addChain('name_me_0', \Civi\Api4\ActivityContact::create()
         ->setCheckPermissions(FALSE)
         ->addValue('activity_id', '$id')
