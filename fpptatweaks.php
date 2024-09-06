@@ -502,6 +502,16 @@ function fpptatweaks_civicrm_postProcess($formName, $form) {
         )
         ->execute();
       CRM_Core_Session::setStatus(E::ts('Your request is pending review by FPPTA staff.'), '', 'success');
+
+      // Always redirect this profile to the 'my dashboard' page, with additional parameters.
+      // I don't know why, but if we don't use these additional parameters, any status
+      // messages (such as the one defined above) will not be displayed for the user; apparenly
+      // the situation is that the dashboard is silently loaded TWICE, thus the messages
+      // are consumed on the first load, and then the second load finds no messages to display.
+      // For reasons unknown, specifying q=civicrm%2Ffppta%2Fmydashboard has the effect
+      // of only loading the dashboard once, or at least of allowing the messages to
+      // be displayed to the user.
+      CRM_Core_Session::singleton()->replaceUserContext(Civi::settings()->get('fpptatweaks_dashboard_url') . '/?civiwp=CiviCRM&q=civicrm%2Ffppta%2Fmydashboard&reset=1');
     }
   }
 }
