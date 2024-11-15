@@ -136,4 +136,25 @@ AND cc.sort_name LIKE '%$name%'";
     return $contacts;
   }
 
+  /**
+   * Define the sections of User Dashboard (civicrm/user) for which this extension
+   * will support appending arbitrary html. Created for https://joinery.freshdesk.com/helpdesk/tickets/1645
+   * which requested the ability to append a link below the Membership tab,
+   * so this method was first written to support only that section. But in theory,
+   * any section could be so supported.
+   *
+   * @return array
+   *   Array of key/value pairs, in which:
+   *     key is the section name as shown in the "crm-dashboard-*" classname for the
+   *       dashboard section <tr> element. (e.g. for members section, this tr is
+   *       class="crm-dashboard-civimember";
+   *     value is the human-readable name to be used in labels for the relevant
+   *       field in the extension settings page.
+   */
+  public static function getSupportedDashboardSectionAppends() {
+    return array(
+      'civimember' => E::ts('Memberships'),
+    );
+  }
+
 }

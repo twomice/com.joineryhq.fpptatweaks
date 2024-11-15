@@ -64,4 +64,11 @@ CRM.$(function($) {
   if (CRM.vars.fpptatweaks.bodyClass) {
     $('body').addClass(CRM.vars.fpptatweaks.bodyClass);
   }
+
+  // If any values have been set for appending to some section (per extension settings),
+  // append them now.
+  for (var sectionKey in CRM.vars.fpptatweaks.sectionAppends) {
+    console.log(sectionKey, CRM.vars.fpptatweaks.sectionAppends[sectionKey]);
+    CRM.$('tr.crm-dashboard-' + sectionKey +' > td').append(CRM.vars.fpptatweaks.sectionAppends[sectionKey]);
+  }
 });

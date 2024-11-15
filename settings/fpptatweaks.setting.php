@@ -2,9 +2,9 @@
 
 use CRM_Fpptatweaks_ExtensionUtil as E;
 
-return array(
+$settings = array(
   'fpptatweaks_cppt_history_profile' => array(
-    'group_name' => 'Fpptatweaks Use Tabs',
+    'group_name' => 'domain',
     'group' => 'fpptatweaks',
     'name' => 'fpptatweaks_cppt_history_profile',
     'add' => '5.0',
@@ -23,7 +23,7 @@ return array(
     'X_options_callback' => 'CRM_Fpptatweaks_Form_Settings::getCpptHistoryProfileOptions',
   ),
   'fpptatweaks_new_relationship_profile' => array(
-    'group_name' => 'New Relationship Profile',
+    'group_name' => 'domain',
     'group' => 'fpptatweaks',
     'name' => 'fpptatweaks_new_relationship_profile',
     'add' => '5.0',
@@ -42,7 +42,7 @@ return array(
     'X_options_callback' => 'CRM_Fpptatweaks_Form_Settings::getUFGroupList',
   ),
   'fpptatweaks_new_relationship_tag' => array(
-    'group_name' => 'New Relationship Tag',
+    'group_name' => 'domain',
     'group' => 'fpptatweaks',
     'name' => 'fpptatweaks_new_relationship_tag',
     'add' => '5.0',
@@ -61,7 +61,7 @@ return array(
     'X_options_callback' => 'CRM_Fpptatweaks_Form_Settings::getTagList',
   ),
   'fpptatweaks_dashboard_url' => array(
-    'group_name' => 'Full URL to "My Dashboard" page',
+    'group_name' => 'domain',
     'group' => 'fpptatweaks',
     'name' => 'fpptatweaks_dashboard_url',
     'add' => '5.0',
@@ -74,3 +74,26 @@ return array(
     'html_type' => 'Text',
   ),
 );
+
+foreach (CRM_Fpptatweaks_Util::getSupportedDashboardSectionAppends() as $name => $label) {
+  $settingName = 'fpptatweaks_dashboard_section_post_' . $name;
+  $settings[$settingName] = array(
+    'group_name' => 'domain',
+    'group' => 'fpptatweaks',
+    'name' => $settingName,
+    'add' => '5.0',
+    'is_domain' => 1,
+    'is_contact' => 0,
+    'title' => E::ts('HTML to append in Dashboard <em>' . $label . '</em> section'),
+    'type' => 'String',
+    'quick_form_type' => 'Element',
+    'html_type' => 'Textarea',
+    'html_attributes' => array(
+      'rows' => '10',
+      'cols' => "70",
+      'class' => 'crm-form-wysiwyg',
+    ),
+  );
+}
+
+return $settings;

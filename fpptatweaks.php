@@ -265,6 +265,24 @@ function fpptatweaks_civicrm_pageRun(&$page) {
     $jsVars = [
       'bodyClass' => 'fpptatweaks-dashboard-is-my-contact-' . ($page->_contactId == CRM_Core_Session::getLoggedInContactID() ? 'true' : 'false'),
     ];
+    foreach (CRM_Fpptatweaks_Util::getSupportedDashboardSectionAppends() as $name => $label) {
+      // Why use decodeValue() here? It goes like this:
+      // - This value is from a setting (see fpptatweaks.setting.php).
+      // - This extension saves settings through civicrm_api3('setting', 'create'),
+      //   which causes the values to be passed through encodeValue(), essentially
+      //   passing them through htmlspecialchars(). That is a security measure deep
+      //   in the bones of CiviCRM.
+      // - We trust this field value (just as CiviCRM trusts fields named 'help_pre',
+      //   'description', etc., see CRM_Utils_API_HTMLInputCoder::getSkipFields()),
+      //   because it can only be set by logged-in admin users.
+      // - Since we trust it, we _wish_ there were a way to add it to CiviCRM's
+      //   "skipped fields" (fields deemed save and not automatically encoded),
+      //   but there's no way to do that.
+      // - THEREFORE: We admit defeat on the input/encoding front, and here simply
+      //   reverse that encodeing on output.
+      $sectionAppendValue = CRM_Utils_API_HTMLInputCoder::singleton()->decodeValue(Civi::settings()->get('fpptatweaks_dashboard_section_post_' . $name));
+      $jsVars['sectionAppends'][$name] = $sectionAppendValue;
+    }
     CRM_Core_Resources::singleton()->addVars('fpptatweaks', $jsVars);
   }
 }
