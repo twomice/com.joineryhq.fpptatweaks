@@ -68,7 +68,20 @@ CRM.$(function($) {
   // If any values have been set for appending to some section (per extension settings),
   // append them now.
   for (var sectionKey in CRM.vars.fpptatweaks.sectionAppends) {
-    console.log(sectionKey, CRM.vars.fpptatweaks.sectionAppends[sectionKey]);
     CRM.$('tr.crm-dashboard-' + sectionKey +' > td').append(CRM.vars.fpptatweaks.sectionAppends[sectionKey]);
   }
+
+  // Append 'is dashboard' marker to all links in the dashboard (for support of
+  // fpptatweaks_dashboard_contribution_append setting).
+  CRM.$('table.dashboard-elements a').attr('href', function(idx, attrVal) {
+    // jQuery shorthand function; reference: https://api.jquery.com/attr/#attr-attributeName-function
+    var url = new URL(attrVal, window.location.origin);
+    var urlParams = url.searchParams;
+    urlParams.set('isfpptadashboard', 1);
+    // Must prepend '?' because url.search needs it, but params.toString() doesn't include it.
+    url.search = '?' + urlParams.toString();
+    // Return the new URL as a string.
+    return url.toString();
+  });
+
 });

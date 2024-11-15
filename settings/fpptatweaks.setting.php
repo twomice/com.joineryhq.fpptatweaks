@@ -73,6 +73,23 @@ $settings = array(
     'quick_form_type' => 'Element',
     'html_type' => 'Text',
   ),
+  'fpptatweaks_dashboard_contribution_append' => array(
+    'group_name' => 'domain',
+    'group' => 'fpptatweaks',
+    'name' => 'fpptatweaks_dashboard_contribution_append',
+    'add' => '5.0',
+    'is_domain' => 1,
+    'is_contact' => 0,
+    'title' => E::ts('HTML to append to contribution Thank You page when navigating from the Dashboard'),
+    'type' => 'String',
+    'quick_form_type' => 'Element',
+    'html_type' => 'Textarea',
+    'html_attributes' => array(
+      'rows' => '10',
+      'cols' => "70",
+      'class' => 'crm-form-wysiwyg',
+    ),
+  ),
 );
 
 foreach (CRM_Fpptatweaks_Util::getSupportedDashboardSectionAppends() as $name => $label) {

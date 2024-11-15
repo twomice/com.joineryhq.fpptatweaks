@@ -78,7 +78,20 @@ function fpptatweaks_civicrm_alterTemplateFile($formName, &$form, $context, &$tp
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_alterContent
  */
 function fpptatweaks_civicrm_alterContent(&$content, $context, $tplName, &$object) {
-  if ($context == 'page' && ($object->getVar('_name') == 'CRM_Contact_Page_View_UserDashBoard')) {
+  if ($context == 'form' && is_a($object, 'CRM_Contribute_Form_Contribution_ThankYou')) {
+    // On contribution thank-you pages, find out if the Main contribution page was
+    // loaded with a url query parameter 'isfpptadashboard' (This will have been
+    // added to links from civicrm/user, in js/CRM_Contact_Page_View_UserDashBoard.js
+    $entryUrl = htmlspecialchars_decode($object->_params['entryURL']);
+    $urlQuery = parse_url($entryUrl, PHP_URL_QUERY);
+    $queryParts = [];
+    parse_str($urlQuery, $queryParts);
+    if ($queryParts['isfpptadashboard']) {
+      // If that query parameter is defined, then append the configured html to the thank-you page.
+      $content .= CRM_Fpptatweaks_Util::sanitizeAdminSettingHtml(Civi::settings()->get('fpptatweaks_dashboard_contribution_append'));
+    }
+  }
+  elseif ($context == 'page' && ($object->getVar('_name') == 'CRM_Contact_Page_View_UserDashBoard')) {
     // NOTE: Javascript relevant to this page is added in fpptatweaks_civicrm_pageRun().
     $userCid = CRM_Core_Session::singleton()->getLoggedInContactID();
     $relatedOrgs = CRM_Fpptatweaks_Util::getPermissionedContacts($userCid, NULL, NULL, 'Organization');
@@ -233,7 +246,9 @@ function fpptatweaks_civicrm_pageRun(&$page) {
       //   but there's no way to do that.
       // - THEREFORE: We admit defeat on the input/encoding front, and here simply
       //   reverse that encodeing on output.
-      $sectionAppendValue = CRM_Utils_API_HTMLInputCoder::singleton()->decodeValue(Civi::settings()->get('fpptatweaks_dashboard_section_post_' . $name));
+      $sectionAppendValue = CRM_Fpptatweaks_Util::sanitizeAdminSettingHtml(Civi::settings()->get('fpptatweaks_dashboard_section_post_' . $name));
+      // Despite assurances of "safe values" mentioned above, we'll still run
+      // this content through HTML Purifier, just in case.
       $jsVars['sectionAppends'][$name] = $sectionAppendValue;
     }
     CRM_Core_Resources::singleton()->addVars('fpptatweaks', $jsVars);

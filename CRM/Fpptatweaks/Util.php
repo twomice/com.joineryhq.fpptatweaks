@@ -157,4 +157,33 @@ AND cc.sort_name LIKE '%$name%'";
     );
   }
 
+  /**
+   * STRICTLY for settings managed by this extension which are editable only by
+   * logged-in admin users.
+   *
+   * @param string $htmlString
+   * @return string
+   */
+  public static function sanitizeAdminSettingHtml($htmlString) {
+    // Why use decodeValue() here? It goes like this:
+    // - This value is from a setting managed by this extension (defined in fpptatweaks.setting.php).
+    // - This extension saves settings through civicrm_api3('setting', 'create'),
+    //   which causes the values to be passed through encodeValue(), essentially
+    //   passing them through htmlspecialchars(). That is a security measure deep
+    //   in the bones of CiviCRM.
+    // - We trust this field value (just as CiviCRM trusts fields named 'help_pre',
+    //   'description', etc., per CRM_Utils_API_HTMLInputCoder::getSkipFields()),
+    //   because it can only be set by logged-in admin users.
+    // - Since we trust it, we _wish_ there were a way to add it to CiviCRM's
+    //   "skipped fields" (fields deemed save and not automatically encoded),
+    //   but there's no way to do that.
+    // - THEREFORE: We admit defeat on the input/encoding front, and here simply
+    //   reverse that encodeing on output.
+    $ret = CRM_Utils_API_HTMLInputCoder::singleton()->decodeValue($htmlString);
+    // Despite assurances of "safe values" mentioned above, we'll still run
+    // this content through HTML Purifier, just in case.
+    $ret = CRM_Utils_String::purifyHTML($ret);
+    return $ret;
+  }
+
 }
