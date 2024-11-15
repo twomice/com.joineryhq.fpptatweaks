@@ -4,7 +4,7 @@ use CRM_Fpptatweaks_ExtensionUtil as E;
 /**
  * Collection of upgrade steps.
  */
-class CRM_Fpptatweaks_Upgrader extends CRM_Fpptatweaks_Upgrader_Base {
+class CRM_Fpptatweaks_Upgrader extends CRM_Extension_Upgrader_Base {
 
   /**
    * Override parent.
