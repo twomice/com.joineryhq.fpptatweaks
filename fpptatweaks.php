@@ -610,3 +610,17 @@ function _fpptatweaks_dashboard_add_primary_name_to_membership_type($membershipG
   }
   $page->assign($membershipGrouping, $members);
 }
+
+/**
+ * Implements hook_civicrm_apiWrappers().
+ *
+ */
+function fpptatweaks_civicrm_apiWrappers(&$wrappers, $apiRequest) {
+  if (
+    strtolower($apiRequest['entity']) == 'invoicespecialvalues'
+    && strtolower($apiRequest['action']) == 'get'
+  ) {
+    // On invoicespecialvalues.get, add wrappers to provide extra data in the response).
+    $wrappers[] = new CRM_Fpptatweaks_APIWrappers_Invoicespecialvalues_Get();
+  }
+}
