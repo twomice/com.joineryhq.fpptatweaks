@@ -23,6 +23,7 @@ Specialized CiviCRM modifications for FPPTA:
 * Add Invoice Number column in event and contribution search results.
 * Remove default values for 'status' field in search criteria on Find Contributions.
 * For the "On Behalf of Organization" profile in contribution pages, remove the "Enter a new organization" option, thus requiring the user to select among their list of existing organizations.
+* When the invoicespecialvalues.get api (provided by `invoicespecialvalues` extension) is called for a certain contriubution, append to the response an array value indicating the display name of the 'attributed organization' (as defined by the `fpptaqb` extension).
 
 The extension is licensed under [GPL-3.0](LICENSE.txt).
 
