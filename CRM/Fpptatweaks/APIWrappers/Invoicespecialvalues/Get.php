@@ -33,7 +33,7 @@ class CRM_Fpptatweaks_APIWrappers_Invoicespecialvalues_Get {
           'return' => "display_name",
           'id' => $attributedOrgId,
         ]);
-        $result['values']['attributedOrgDisplayName'] = $attributedOrgDisplayName;
+        $result['values'][0]['attributedOrgDisplayName'] = $attributedOrgDisplayName;
       }
     }
 
