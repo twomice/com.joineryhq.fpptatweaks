@@ -251,6 +251,7 @@ function fpptatweaks_civicrm_pageRun(&$page) {
       // this content through HTML Purifier, just in case.
       $jsVars['sectionAppends'][$name] = $sectionAppendValue;
     }
+    $jsVars['fpptatweaks_dashboard_hide_edit_related'] = (bool)(\Civi::settings()->get('fpptatweaks_dashboard_hide_edit_related'));
     CRM_Core_Resources::singleton()->addVars('fpptatweaks', $jsVars);
   }
 }

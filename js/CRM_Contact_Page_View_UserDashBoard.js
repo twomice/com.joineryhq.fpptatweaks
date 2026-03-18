@@ -32,10 +32,15 @@ CRM.$(function($) {
 
       // Insert 'remove relationship' link
       requestEndRelationshipUrl = CRM.url('civicrm/fppta/reqendrship', {rid: $(this).attr('data-id')});
-      $('> td:last-child a[title="Disable Relationship"]', this).after('<a href="' + requestEndRelationshipUrl + '">Remove</a>');
+      $('> td:last-child a[title="' + ts('Disable Relationship') + '"]', this).after('<a href="' + requestEndRelationshipUrl + '" class="action-item crm-hover-button no-popup">' + ts('Remove') + '</a>');
 
       // Remove 'disable relationship' link
-      $('> td:last-child a[title="Disable Relationship"]', this).remove();
+      $('> td:last-child a[title="' + ts('Disable Relationship') + '"]', this).remove();
+
+      // Remove 'edit contact information' link, if called for.
+      if (CRM.vars.fpptatweaks.fpptatweaks_dashboard_hide_edit_related) {
+        $('> td:last-child a[title="' + ts('Edit Contact Information') + '"]', this).remove();
+      }
 
       // Append 'dashbase' param to Dashboard links (for use by CRM_Fpptatweaks_Page_MyDashboard)
       // (The [x-fpptatweaks-is-dashboard-link] attribute is added in fpptatweaks_civicrm_links().)
