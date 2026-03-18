@@ -11,9 +11,10 @@ class CRM_Fpptatweaks_Form_Reqendrship extends CRM_Core_Form {
 
   public function buildQuickForm() {
     if (!$this->_flagSubmitted) {
-      if ($_SERVER['HTTP_REFERER']) {
-        // Try to return to referrer.
-        $this->set('destination', $_SERVER['HTTP_REFERER']);
+      if ($destination = $_SERVER['HTTP_REFERER']) {
+        // Add referer to userContext, plus a #fragment to point to the "related contacts"
+        // tab (since we almost certainly came from there, and since referer will not contain a #fragment).
+        CRM_Core_Session::singleton()->pushUserContext($destination . '#section-permissionedOrgs');
       }
 
       $rid = (CRM_Utils_Request::retrieve('rid', 'Int') ?? 0);
@@ -72,6 +73,10 @@ class CRM_Fpptatweaks_Form_Reqendrship extends CRM_Core_Form {
         'name' => E::ts('Submit request'),
         'isDefault' => TRUE,
       ),
+      array(
+        'type' => 'cancel',
+        'name' => E::ts('Cancel'),
+      ),
     ));
 
     // export form elements
@@ -120,10 +125,6 @@ class CRM_Fpptatweaks_Form_Reqendrship extends CRM_Core_Form {
 
     CRM_Core_Session::setStatus($subject, E::ts('Request filed, pending review by FPPTA staff'));
 
-    // Redirect to destination if known.
-    if ($destination = $this->get('destination')) {
-      CRM_Core_Session::singleton()->pushUserContext($destination);
-    }
     parent::postProcess();
   }
 
