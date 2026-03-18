@@ -30,7 +30,11 @@ class CRM_Fpptatweaks_Page_MyDashboard extends CRM_Core_Page {
     $pass     = ($user || $pass) ? "$pass@" : '';
     $path     = isset($dashbaseParts['path']) ? $dashbaseParts['path'] : '';
     $query    = !empty($queryParams) ? '?' . http_build_query($queryParams) : '';
-    $fragment = isset($dashbaseParts['fragment']) ? '#' . $dashbaseParts['fragment'] : '';
+    // Omit $dashbaseParts['fragment'], otherwise user is directed to whatever tab
+    // they were viewing in the previously viewed contact dashboard. We believe it's
+    // a better (less disorienting) UX to send them to the first (default) tab
+    // every time.
+    // $fragment = isset($dashbaseParts['fragment']) ? '#' . $dashbaseParts['fragment'] : '';
 
     // Assemble url components into an actual url.
     $url = "$scheme$user$pass$host$port$path$query$fragment";
