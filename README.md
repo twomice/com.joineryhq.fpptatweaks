@@ -7,6 +7,8 @@ Specialized CiviCRM modifications for FPPTA:
   * New Relationship Profile: Select an existing CiviCRM profile for use in requesting creation of a new organization/individual relationship.
   * New Relationship Tag: Select an existing tag to be applie to individual contacts for whom a new organization/individual relationship has been requested.
   * URL path to "My Dashboard" page: A url path indicating a custom "My CiviCRM User Dashboard" page (assuming the site may have a specific page in the CMS where CiviCRM User Dashboard is embedded).
+  * Hide "Edit Related Contact" link in user Dashboard': as described.
+  * HTML to append to the Dashboard Memberships section": as described.
 * Provide a "Request End Relationship" form for requesting removal of an existing organization/individual relationship.
 * On the CiviCRM user dashboard (https://drupal.example.org/civicrm/user):
   * Add a class to <body> indicating whether this is (or is not) the user's own dashboard, one of:
@@ -15,8 +17,11 @@ Specialized CiviCRM modifications for FPPTA:
   * Under the "Your Contacts / Organizations" section:
 	* Replace all clickable links with equivalent non-clickable plain text in the "Relationship" column and the (unlabeled) Contact Name column.
 	* Replace the "Disable" link in the (unlabeled) Actions column with a "Remove" link which points to the "Request End Relationship" form.
+    * Hide "Edit Related Contact" link, depending on extension setting 'Hide "Edit Related Contact" link in user Dashboard'.
   * Under the "Your Contribution(s)" section:
     * Alter the columns which are displayed (e.g. add Source and Invoice Number columns; remove Total Amount column)
+  * Under the "Memberships" section:
+    * Append HTML as given in the "HTML to append in Dashboard Memberships section" setting.
 * When editing a related contact via the CiviCRM User Dashboard:
   * Upon save, redirect to the URL path specified in the 'URL path to "My Dashboard" page' setting, rather than CiviCRM's core User Dashboard URL ('civicrm/user').
 * Provide a new participant listing type: "Name and Organization".
