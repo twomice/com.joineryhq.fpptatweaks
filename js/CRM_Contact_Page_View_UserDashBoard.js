@@ -49,6 +49,8 @@ CRM.$(function($) {
         dashboardLink.href += '&dashbase=' + dashbase;
       }
     });
+    // Trigger window resize to recalculate td width (in case some td content was shortened).
+    $(window).trigger('resize');
   });
 
   // Check if there is an injected element
