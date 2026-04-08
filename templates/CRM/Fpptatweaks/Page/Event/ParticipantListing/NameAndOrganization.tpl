@@ -22,7 +22,7 @@
       {* We ARE in pdf mode. *}
       <table id="fppta-participant-listing-header">
         <tr>
-          <td><img src="{crmResURL ext=com.joineryhq.fpptatweaks file=images/fppta_logo.png}"/></td>
+          <td><img src="{crmResURL ext="com.joineryhq.fpptatweaks" file="images/fppta_logo.png"}"/></td>
           <td>
             <h1>{$fpptaTweaksPageTitle}</h1>
           </td>
